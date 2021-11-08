@@ -5,4 +5,7 @@
     <string name="sort">Sort</string>
     <string name="edit_categories">Edit Categories</string>
     <string name="search">Search</string>
+    <string name="new_to_do_title">What\'s in your mind?</string>
+    <string name="new_to_do_description">Description..</string>
+    <string name="no_date">No Date</string>
 </resources>

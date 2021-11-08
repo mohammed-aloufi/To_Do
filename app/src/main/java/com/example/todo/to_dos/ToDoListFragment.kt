@@ -1,13 +1,18 @@
-package com.example.todo
+package com.example.todo.to_dos
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.*
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todo.R
+import com.example.todo.cateogry.Category
+import com.example.todo.cateogry.CategoryViewModel
+import com.example.todo.new_to_do.NewToDoFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 
 class ToDoListFragment : Fragment() {
 
@@ -22,12 +27,6 @@ class ToDoListFragment : Fragment() {
     }
     private val categoryViewModel by lazy {
         ViewModelProvider(this).get(CategoryViewModel::class.java)
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -56,7 +55,8 @@ class ToDoListFragment : Fragment() {
         super.onStart()
 
         newToDoActionButton.setOnClickListener {
-            Toast.makeText(context, "New To Do Pressed", Toast.LENGTH_SHORT).show()
+            val newToDo = NewToDoFragment()
+            newToDo.show(parentFragmentManager, "new-toDo")
         }
     }
 
@@ -121,6 +121,8 @@ class ToDoListFragment : Fragment() {
 
             val dateString = android.text.format.DateFormat.format(dateFormat, toDo.date)
             toDoDueDateTv.text = dateString
+
+//            toDoCategoryView.setBackgroundColor(resources.getColor(R.color.purple_200))
         }
     }
 

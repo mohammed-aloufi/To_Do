@@ -8,8 +8,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.example.todo.R
-import com.example.todo.cateogry.Category
+import com.example.todo.cateogry.CategoryPickerFragment
+import com.example.todo.database.Category
+import com.example.todo.database.ToDo
+import com.example.todo.to_dos.ToDoViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.*
 
@@ -21,6 +25,12 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
     private lateinit var categoryButton: ImageButton
     private lateinit var cancelButton: ImageButton
     private lateinit var saveButton: ImageButton
+
+    private var dueDate: Date? = null
+
+    private val toDoViewModel by lazy {
+        ViewModelProvider(this).get(ToDoViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,23 +49,16 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
 
     override fun onClick(v: View?) {
         when(v){
-            dateButton -> {
-                val datePicker = DatePickerDialogFragment()
-                datePicker.setTargetFragment(this, 0)
-                datePicker.show(parentFragmentManager, "date")
-            }
-            categoryButton -> {
-                val categoryPicker = CategoryPickerFragment()
-                categoryPicker.setTargetFragment(this, 0)
-                categoryPicker.show(parentFragmentManager, "category")
-            }
+            dateButton -> handleDateButtonPressed()
+            categoryButton -> handleCategoryButtonPressed()
             cancelButton -> dismiss()
-            saveButton -> dismiss() //for now
+            saveButton -> handleSaveButtonPressed()
             else -> Toast.makeText(context, "Unknow error!!", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onDateSelected(date: Date) {
+        dueDate = date
         val dateFormat = "EEE, MMM dd"
         val dateString = android.text.format.DateFormat.format(dateFormat, date)
         dateButton.text = dateString
@@ -63,7 +66,7 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
 
     override fun onCategorySelected(category: Category) {
         val categoryColor = category.color
-        categoryButton.setBackgroundColor(resources.getColor(categoryColor))
+//        categoryButton.setBackgroundColor(resources.getColor(categoryColor))
     }
 
     private fun initViews(view: View){
@@ -82,4 +85,27 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
         saveButton.setOnClickListener(this)
     }
 
+    private fun handleDateButtonPressed(){
+        val datePicker = DatePickerDialogFragment()
+        datePicker.setTargetFragment(this, 0)
+        datePicker.show(parentFragmentManager, "date")
+    }
+
+    private fun handleCategoryButtonPressed(){
+        val categoryPicker = CategoryPickerFragment()
+        categoryPicker.setTargetFragment(this, 0)
+        categoryPicker.show(parentFragmentManager, "category")
+    }
+
+    private fun handleSaveButtonPressed(){
+        val title = newToDoTileTv.text.toString()
+        if (!title.isBlank()) {
+            val description = newToDoDescriptionTv.text.toString()
+            val dueDate = this.dueDate
+            val toDo = ToDo(title = title, description = description, dueDate = dueDate)
+            //TODO : handle category
+            toDoViewModel.addToDo(toDo)
+        }
+        dismiss()
+    }
 }

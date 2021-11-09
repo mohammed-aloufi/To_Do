@@ -20,4 +20,6 @@
     <string name="reschedule_to_do_btn">reschedule</string>
     <string name="add_category_btn_description">add</string>
     <string name="done">Done</string>
+    <string name="delete_to_do">Delete</string>
+    <string name="no_to_do">You don\'t have any to do</string>
 </resources>

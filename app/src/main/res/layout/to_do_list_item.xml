@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="70sp"
     android:background="#E3E2E2"
     android:outlineAmbientShadowColor="#D31616">
 
@@ -37,11 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
-        tools:text="New To Do"
         android:textColor="#000000"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/toDoCategoryView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="New To Do" />
 
     <TextView
         android:id="@+id/toDoDueDateTv"
@@ -49,11 +49,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="10dp"
-        tools:text="TextView"
         android:textColor="#3E3E3E"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/toDoCategoryView"
-        app:layout_constraintTop_toBottomOf="@+id/toDoTitleTv" />
+        app:layout_constraintTop_toBottomOf="@+id/toDoTitleTv"
+        tools:text="TextView" />
 
     <View
         android:id="@+id/view"

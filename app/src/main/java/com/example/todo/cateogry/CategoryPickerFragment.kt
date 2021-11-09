@@ -1,4 +1,4 @@
-package com.example.todo.new_to_do
+package com.example.todo.cateogry
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
-import com.example.todo.cateogry.Category
-import com.example.todo.cateogry.CategoryViewModel
+import com.example.todo.database.Category
 
 class CategoryPickerFragment: DialogFragment() {
 
@@ -76,8 +75,8 @@ class CategoryPickerFragment: DialogFragment() {
 
         fun bindCategory(category: Category){
             this.category = category
-            categoryColorView.setBackgroundColor(resources.getColor(category.color))
-            categoryTitleTv.text = category.title
+//            categoryColorView.setBackgroundColor(resources.getColor(category.color))
+//            categoryTitleTv.text = category.title
         }
 
         override fun onClick(v: View?) {

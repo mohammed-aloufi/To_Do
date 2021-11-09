@@ -4,23 +4,27 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
-import com.example.todo.ToDoDetailesFragment
-import com.example.todo.cateogry.Category
+import com.example.todo.ToDoDetailsFragment
+import com.example.todo.database.Category
 import com.example.todo.cateogry.CategoryViewModel
 import com.example.todo.cateogry.NewCategoryFragment
+import com.example.todo.database.ToDo
 import com.example.todo.new_to_do.NewToDoFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-
+const val EXTRA_ID = "id"
 class ToDoListFragment : Fragment() {
 
     private lateinit var categoriesRecyclerView: RecyclerView
     private lateinit var toDoListRecyclerView: RecyclerView
     private lateinit var newToDoActionButton: FloatingActionButton
+    private lateinit var emptyImageView: ImageView
+    private lateinit var noToDoTextView: TextView
 
     private val toDoViewModel by lazy {
         ViewModelProvider(this).get(ToDoViewModel::class.java)
@@ -38,15 +42,21 @@ class ToDoListFragment : Fragment() {
         setHasOptionsMenu(true)
         initViews(view)
         setLayoutManger()
-        updateToDoUI()
         updateCategoryUI()
 
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        toDoViewModel.liveDataToDo.observe(
+            viewLifecycleOwner, Observer {
+                updateToDoUI(it)
+            })
+    }
     override fun onStart() {
         super.onStart()
-        setClickListener()
+        newToDoBtnSetClickListener()
     }
 
     /** Action Menu */
@@ -78,6 +88,8 @@ class ToDoListFragment : Fragment() {
         categoriesRecyclerView = view.findViewById(R.id.categoriesRecyclerView)
         toDoListRecyclerView = view.findViewById(R.id.toDoListRecyclerView)
         newToDoActionButton = view.findViewById(R.id.newToDoActionButton)
+        emptyImageView = view.findViewById(R.id.emptyImageView)
+        noToDoTextView = view.findViewById(R.id.noToDoTextView)
     }
 
     private fun setLayoutManger() {
@@ -89,7 +101,7 @@ class ToDoListFragment : Fragment() {
         toDoListRecyclerView.layoutManager = toDoLayoutManager
     }
 
-    private fun setClickListener() {
+    private fun newToDoBtnSetClickListener() {
         newToDoActionButton.setOnClickListener {
             val newToDo = NewToDoFragment()
             newToDo.show(parentFragmentManager, "new-toDo")
@@ -97,9 +109,18 @@ class ToDoListFragment : Fragment() {
     }
 
     /** UI updates */
-    private fun updateToDoUI() {
-        val toDoAdapter = ToDoAdapter(toDoViewModel.toDos)
-        toDoListRecyclerView.adapter = toDoAdapter
+    private fun updateToDoUI(toDos: List<ToDo>) {
+        if (toDos.isEmpty()){
+            toDoListRecyclerView.visibility = View.GONE
+            emptyImageView.visibility = View.VISIBLE
+            noToDoTextView.visibility = View.VISIBLE
+        }else {
+            emptyImageView.visibility = View.GONE
+            noToDoTextView.visibility = View.GONE
+            toDoListRecyclerView.visibility = View.VISIBLE
+            val toDoAdapter = ToDoAdapter(toDos)
+            toDoListRecyclerView.adapter = toDoAdapter
+        }
     }
 
     private fun updateCategoryUI() {
@@ -132,15 +153,27 @@ class ToDoListFragment : Fragment() {
             toDoIsDoneCheckBox.isChecked = toDo.isDone
             toDoTitleTv.text = toDo.title
 
-            val dateString = android.text.format.DateFormat.format(dateFormat, toDo.date)
-            toDoDueDateTv.text = dateString
+            when(toDo.dueDate){
+                null -> toDoDueDateTv.visibility = View.GONE
+                else -> {
+                    val dateString = android.text.format.DateFormat.format(dateFormat, toDo.dueDate)
+                    toDoDueDateTv.text = dateString
+                }
+            }
+            //TODO: change toDoCategoryView based on category
 //            toDoCategoryView.setBackgroundColor(resources.getColor(R.color.purple_200))
         }
 
         override fun onClick(v: View?) {
             when (v) {
                 itemView -> {
-                    val detailsFragment = ToDoDetailesFragment()
+                    val args = Bundle()
+                    args.putSerializable(
+                        EXTRA_ID,
+                        toDo.id
+                    )
+                    val detailsFragment = ToDoDetailsFragment()
+                    detailsFragment.arguments = args
 
                     activity?.let {
                         it.supportFragmentManager
@@ -180,10 +213,10 @@ class ToDoListFragment : Fragment() {
 
         fun bindCategory(category: Category) {
             this.category = category
-            categoryButton?.text = category.title
-            categoryButton?.setOnClickListener {
-                Toast.makeText(context, "${category.title} Pressed", Toast.LENGTH_SHORT).show()
-            }
+//            categoryButton?.text = category.title
+//            categoryButton?.setOnClickListener {
+//                Toast.makeText(context, "${category.title} Pressed", Toast.LENGTH_SHORT).show()
+//            }
 
         }
 

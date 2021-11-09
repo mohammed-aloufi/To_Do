@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import com.example.todo.CRIME_DATE_KEY
 import java.util.*
 
 class DatePickerDialogFragment: DialogFragment() {
@@ -14,7 +15,9 @@ class DatePickerDialogFragment: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        val date = arguments?.getSerializable(CRIME_DATE_KEY) as Date
         val calender = Calendar.getInstance()
+        calender.time = date
 
         val year = calender.get(Calendar.YEAR)
         val month = calender.get(Calendar.MONTH)

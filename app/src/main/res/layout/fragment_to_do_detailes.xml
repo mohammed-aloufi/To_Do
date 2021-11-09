@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ToDoDetailesFragment">
+    tools:context=".ToDoDetailsFragment">
 
     <TextView
         android:id="@+id/textView5"
@@ -85,14 +85,28 @@
         tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/saveUpdatesButton"
+        android:id="@+id/deleteToDoButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
-        android:text="@string/done"
+        android:background="#F44336"
+        android:text="@string/delete_to_do"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/saveUpdatesButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="#009688"
+        android:text="@string/done"
+        app:layout_constraintBottom_toTopOf="@+id/deleteToDoButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

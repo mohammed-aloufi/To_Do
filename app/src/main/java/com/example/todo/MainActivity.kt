@@ -11,7 +11,6 @@ class MainActivity : AppCompatActivity() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
 
         if (currentFragment == null){
-            //creating the fragment
             val fragment = ToDoListFragment()
             supportFragmentManager
                 .beginTransaction()

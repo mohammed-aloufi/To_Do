@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">To Do</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="all">All</string>
     <string name="sort">Sort</string>
     <string name="edit_categories">Edit Categories</string>
     <string name="search">Search</string>
@@ -12,6 +10,14 @@
     <string name="add_new_category_label">Add New Category</string>
     <string name="new_task_label">New Task</string>
     <string name="category_color_label">Category Color</string>
-    <string name="to_do_description">Description</string>
+    <string name="all_category">All</string>
     <string name="title">Title</string>
+    <string name="to_do_description">Description</string>
+    <string name="new_to_do_action_button">add to do</string>
+    <string name="save">save</string>
+    <string name="cancel">cancel</string>
+    <string name="choose_category">choose category</string>
+    <string name="reschedule_to_do_btn">reschedule</string>
+    <string name="add_category_btn_description">add</string>
+    <string name="done">Done</string>
 </resources>

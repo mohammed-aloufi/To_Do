@@ -58,10 +58,10 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        tools:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:text="Name" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/toDoDetailDateButton"
@@ -82,5 +82,17 @@
         android:src="@drawable/ic_baseline_class_24"
         app:layout_constraintStart_toEndOf="@+id/toDoDetailDateButton"
         app:layout_constraintTop_toTopOf="@+id/toDoDetailDateButton"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/saveUpdatesButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:text="@string/done"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

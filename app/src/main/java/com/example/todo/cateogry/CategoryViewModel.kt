@@ -2,7 +2,6 @@ package com.example.todo.cateogry
 
 import androidx.lifecycle.ViewModel
 import com.example.todo.R
-import com.example.todo.cateogry.Category
 
 class CategoryViewModel: ViewModel() {
 

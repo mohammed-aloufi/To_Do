@@ -18,12 +18,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ToDoListFragment : Fragment() {
 
-    /** Widgets */
     private lateinit var categoriesRecyclerView: RecyclerView
     private lateinit var toDoListRecyclerView: RecyclerView
     private lateinit var newToDoActionButton: FloatingActionButton
 
-    /** Attributes */
     private val toDoViewModel by lazy {
         ViewModelProvider(this).get(ToDoViewModel::class.java)
     }
@@ -38,28 +36,17 @@ class ToDoListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_to_do_list, container, false)
 
         setHasOptionsMenu(true)
-        categoriesRecyclerView = view.findViewById(R.id.categoriesRecyclerView)
-        toDoListRecyclerView = view.findViewById(R.id.toDoListRecyclerView)
-        newToDoActionButton = view.findViewById(R.id.newToDoActionButton)
-
-        val toDoLayoutManager = LinearLayoutManager(context)
-        val categoryLayoutManger = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-        categoriesRecyclerView.layoutManager = categoryLayoutManger
-        toDoListRecyclerView.layoutManager = toDoLayoutManager
-
+        initViews(view)
+        setLayoutManger()
         updateToDoUI()
         updateCategoryUI()
+
         return view
     }
 
     override fun onStart() {
         super.onStart()
-
-        newToDoActionButton.setOnClickListener {
-            val newToDo = NewToDoFragment()
-            newToDo.show(parentFragmentManager, "new-toDo")
-        }
+        setClickListener()
     }
 
     /** Action Menu */
@@ -69,7 +56,7 @@ class ToDoListFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+        return when (item.itemId) {
             R.id.sortMenuButton -> {
                 Toast.makeText(context, "Sort pressed", Toast.LENGTH_SHORT).show()
                 true
@@ -87,7 +74,27 @@ class ToDoListFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun initViews(view: View) {
+        categoriesRecyclerView = view.findViewById(R.id.categoriesRecyclerView)
+        toDoListRecyclerView = view.findViewById(R.id.toDoListRecyclerView)
+        newToDoActionButton = view.findViewById(R.id.newToDoActionButton)
+    }
 
+    private fun setLayoutManger() {
+        val toDoLayoutManager = LinearLayoutManager(context)
+        val categoryLayoutManger =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        categoriesRecyclerView.layoutManager = categoryLayoutManger
+        toDoListRecyclerView.layoutManager = toDoLayoutManager
+    }
+
+    private fun setClickListener() {
+        newToDoActionButton.setOnClickListener {
+            val newToDo = NewToDoFragment()
+            newToDo.show(parentFragmentManager, "new-toDo")
+        }
+    }
 
     /** UI updates */
     private fun updateToDoUI() {
@@ -95,13 +102,14 @@ class ToDoListFragment : Fragment() {
         toDoListRecyclerView.adapter = toDoAdapter
     }
 
-    private fun updateCategoryUI(){
+    private fun updateCategoryUI() {
         val categoryAdapter = CategoryAdapter(categoryViewModel.categories)
         categoriesRecyclerView.adapter = categoryAdapter
     }
 
     /** toDoRecyclerView's ViewHolder & Adapter */
-    private inner class ToDoViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class ToDoViewHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
 
         private val toDoIsDoneCheckBox: CheckBox = view.findViewById(R.id.isDoneCheckBox)
         private val toDoCategoryView: View = view.findViewById(R.id.toDoCategoryView)
@@ -115,6 +123,7 @@ class ToDoListFragment : Fragment() {
         init {
             itemView.setOnClickListener(this)
             rescheduleToDoBtn.visibility = View.GONE
+            itemView.setOnClickListener(this)
         }
 
         fun bind(toDo: ToDo) {
@@ -125,7 +134,6 @@ class ToDoListFragment : Fragment() {
 
             val dateString = android.text.format.DateFormat.format(dateFormat, toDo.date)
             toDoDueDateTv.text = dateString
-
 //            toDoCategoryView.setBackgroundColor(resources.getColor(R.color.purple_200))
         }
 
@@ -166,10 +174,11 @@ class ToDoListFragment : Fragment() {
     /** CategoriesRecyclerView's ViewHolder & Adapter */
     private inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val categoryButton: Button? = view.findViewById(R.id.categoryButton)
-        private val addCategoryImageButton: ImageButton? =  view.findViewById(R.id.addCategoryImageButton)
+        private val addCategoryImageButton: ImageButton? =
+            view.findViewById(R.id.addCategoryImageButton)
         private lateinit var category: Category
 
-        fun bindCategory(category: Category){
+        fun bindCategory(category: Category) {
             this.category = category
             categoryButton?.text = category.title
             categoryButton?.setOnClickListener {
@@ -180,17 +189,16 @@ class ToDoListFragment : Fragment() {
 
         fun bindAddButton() {
             addCategoryImageButton?.setOnClickListener {
-//                Toast.makeText(context, "Add Category Pressed", Toast.LENGTH_SHORT).show()
                 val newCategory = NewCategoryFragment()
                 newCategory.show(parentFragmentManager, "new-toDo")
             }
         }
     }
 
-    private inner class CategoryAdapter(var categories: List<Category>)
-        : RecyclerView.Adapter<CategoryViewHolder>() {
+    private inner class CategoryAdapter(var categories: List<Category>) :
+        RecyclerView.Adapter<CategoryViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-            return when(viewType){
+            return when (viewType) {
                 R.layout.category_list_item -> {
                     val view = layoutInflater.inflate(R.layout.category_list_item, parent, false)
                     CategoryViewHolder(view)
@@ -204,7 +212,7 @@ class ToDoListFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-            when(getItemViewType(position)) {
+            when (getItemViewType(position)) {
                 R.layout.category_list_item -> {
                     val category = categories[position]
                     holder.bindCategory(category)
@@ -216,12 +224,12 @@ class ToDoListFragment : Fragment() {
         }
 
         override fun getItemViewType(position: Int): Int {
-            return when(position) {
+            return when (position) {
                 categories.size -> R.layout.add_category_button
                 else -> R.layout.category_list_item
             }
         }
-        override fun getItemCount(): Int = categories.size + 1
 
+        override fun getItemCount(): Int = categories.size + 1
     }
 }

@@ -1,17 +1,37 @@
 package com.example.todo.to_dos
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.todo.database.ToDo
+import com.example.todo.database.ToDoRepository
+import java.util.*
 
 class ToDoViewModel: ViewModel() {
 
-    val toDos = mutableListOf<ToDo>()
+    private val toDoRepository = ToDoRepository.get()
+    private val toDoIdLiveData = MutableLiveData<UUID>()
+    val liveDataToDo = toDoRepository.getAllToDos()
 
-    init {
-        for (i in 0..15){
-            val toDo = ToDo()
-            toDo.title = "To Do ${i+1}"
-            toDo.isDone = i % 2 == 0
-            toDos += toDo
+    var toDoLiveData: LiveData<ToDo?> =
+        Transformations.switchMap(toDoIdLiveData){
+            toDoRepository.getToDo(it)
         }
+
+    fun loadToDo(toDoId: UUID){
+        toDoIdLiveData.value = toDoId
+    }
+
+    fun saveUpdates(toDo: ToDo){
+        toDoRepository.updateToDo(toDo)
+    }
+
+    fun delete(toDo: ToDo){
+        toDoRepository.deleteToDo(toDo)
+    }
+
+    fun addToDo(toDo: ToDo){
+        toDoRepository.addToDo(toDo)
     }
 }

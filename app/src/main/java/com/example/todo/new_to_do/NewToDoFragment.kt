@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.Toast
 import com.example.todo.R
 import com.example.todo.cateogry.Category
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -39,8 +38,8 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
         newToDoDescriptionTv = view.findViewById(R.id.newToDoDescriptionTv)
         dateButton = view.findViewById(R.id.dateButton)
         categoryButton = view.findViewById(R.id.categoryImageButton)
-        cancelButton = view.findViewById(R.id.cancelButton)
-        saveButton = view.findViewById(R.id.saveImageButton)
+        cancelButton = view.findViewById(R.id.cancelNewToDoButton)
+        saveButton = view.findViewById(R.id.saveNewToDoImageButton)
     }
 
     override fun onStart() {

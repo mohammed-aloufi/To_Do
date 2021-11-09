@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.cateogry.Category
 import com.example.todo.cateogry.CategoryViewModel
+import com.example.todo.cateogry.NewCategoryFragment
 import com.example.todo.new_to_do.NewToDoFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -160,7 +161,9 @@ class ToDoListFragment : Fragment() {
 
         fun bindAddButton() {
             addCategoryImageButton?.setOnClickListener {
-                Toast.makeText(context, "Add Category Pressed", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Add Category Pressed", Toast.LENGTH_SHORT).show()
+                val newCategory = NewCategoryFragment()
+                newCategory.show(parentFragmentManager, "new-toDo")
             }
         }
     }

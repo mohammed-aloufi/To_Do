@@ -11,4 +11,10 @@ class CategoryViewModel: ViewModel() {
         Category(title = "Work", R.color.teal_200),
         Category(title = "Groceries", R.color.purple_700)
     )
+
+    val colors = listOf(
+        R.color.purple_200,
+        R.color.teal_200,
+        R.color.purple_700
+    )
 }

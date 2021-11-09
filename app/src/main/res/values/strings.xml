@@ -12,4 +12,6 @@
     <string name="add_new_category_label">Add New Category</string>
     <string name="new_task_label">New Task</string>
     <string name="category_color_label">Category Color</string>
+    <string name="to_do_description">Description</string>
+    <string name="title">Title</string>
 </resources>

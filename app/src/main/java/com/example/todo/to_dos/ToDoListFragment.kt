@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
+import com.example.todo.ToDoDetailesFragment
 import com.example.todo.cateogry.Category
 import com.example.todo.cateogry.CategoryViewModel
 import com.example.todo.cateogry.NewCategoryFragment
@@ -100,7 +101,7 @@ class ToDoListFragment : Fragment() {
     }
 
     /** toDoRecyclerView's ViewHolder & Adapter */
-    private inner class ToDoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private inner class ToDoViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
 
         private val toDoIsDoneCheckBox: CheckBox = view.findViewById(R.id.isDoneCheckBox)
         private val toDoCategoryView: View = view.findViewById(R.id.toDoCategoryView)
@@ -110,7 +111,9 @@ class ToDoListFragment : Fragment() {
 
         private lateinit var toDo: ToDo
         private val dateFormat = "EEE, MMM dd"
+
         init {
+            itemView.setOnClickListener(this)
             rescheduleToDoBtn.visibility = View.GONE
         }
 
@@ -124,6 +127,22 @@ class ToDoListFragment : Fragment() {
             toDoDueDateTv.text = dateString
 
 //            toDoCategoryView.setBackgroundColor(resources.getColor(R.color.purple_200))
+        }
+
+        override fun onClick(v: View?) {
+            when (v) {
+                itemView -> {
+                    val detailsFragment = ToDoDetailesFragment()
+
+                    activity?.let {
+                        it.supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.fragmentContainerView, detailsFragment)
+                            .addToBackStack("")
+                            .commit()
+                    }
+                }
+            }
         }
     }
 

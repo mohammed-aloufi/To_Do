@@ -16,6 +16,7 @@ class ToDoDetailesFragment : Fragment() {
     private lateinit var toDoDescriptionTv: EditText
     private lateinit var toDoDateButton: Button
     private lateinit var toDoCategoryImageButton: ImageButton
+    private lateinit var saveUpdatesButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +31,6 @@ class ToDoDetailesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_to_do_detailes, container, false)
         initViews(view)
 
-
-
         return view
     }
 
@@ -40,5 +39,6 @@ class ToDoDetailesFragment : Fragment() {
         toDoDescriptionTv = view.findViewById(R.id.toDoDetailDescripTv)
         toDoDateButton = view.findViewById(R.id.toDoDetailDateButton)
         toDoCategoryImageButton = view.findViewById(R.id.toDoDetailCategImageBtn)
+        saveUpdatesButton = view.findViewById(R.id.saveUpdatesButton)
     }
 }

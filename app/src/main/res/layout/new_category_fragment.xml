@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageButton
-        android:id="@+id/saveNewCategoyImageBtn"
+        android:id="@+id/saveNewCategoryImageBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -17,7 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:srcCompat="@drawable/ic_baseline_done_24"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
+        android:contentDescription="@string/save" />
 
     <ImageButton
         android:id="@+id/cancelNewCategoryButton"
@@ -31,7 +32,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_cancel_24"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:contentDescription="@string/cancel" />
 
     <TextView
         android:id="@+id/textView"
@@ -55,12 +57,14 @@
         android:layout_marginEnd="15dp"
         android:ems="10"
         android:hint="@string/category_name"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/textView4"
@@ -85,7 +89,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/saveNewCategoyImageBtn"
+        app:layout_constraintEnd_toStartOf="@+id/saveNewCategoryImageBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">
 

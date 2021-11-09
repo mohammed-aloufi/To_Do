@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.cateogry.Category
 import com.example.todo.cateogry.CategoryViewModel
-import java.util.*
 
 class CategoryPickerFragment: DialogFragment() {
 
@@ -34,10 +32,8 @@ class CategoryPickerFragment: DialogFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.choose_category_fragment, container, false)
 
-        chooseCategoryRv = view.findViewById(R.id.chooseCategoryRv)
-
-        val categoryLayoutManger = LinearLayoutManager(context)
-        chooseCategoryRv.layoutManager = categoryLayoutManger
+        initViews(view)
+        setLayoutManger()
         updateCategoryUI()
 
         return view
@@ -45,14 +41,26 @@ class CategoryPickerFragment: DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
-//        val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
-        dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        setDialogWidth()
+    }
+
+    private fun initViews(view: View){
+        chooseCategoryRv = view.findViewById(R.id.chooseCategoryRv)
+    }
+
+    private fun setLayoutManger(){
+        val categoryLayoutManger = LinearLayoutManager(context)
+        chooseCategoryRv.layoutManager = categoryLayoutManger
     }
 
     private fun updateCategoryUI(){
         val categoryAdapter = CategoryAdapter(categoryViewModel.categories)
         chooseCategoryRv.adapter = categoryAdapter
+    }
+
+    private fun setDialogWidth(){
+        val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
+        dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     /** CategoriesRecyclerView's ViewHolder & Adapter */
@@ -65,6 +73,7 @@ class CategoryPickerFragment: DialogFragment() {
         init {
             itemView.setOnClickListener(this)
         }
+
         fun bindCategory(category: Category){
             this.category = category
             categoryColorView.setBackgroundColor(resources.getColor(category.color))
@@ -75,13 +84,12 @@ class CategoryPickerFragment: DialogFragment() {
             when(v){
                 itemView -> {
                     targetFragment?.let {
-                        (it as CategoryPickerFragment.CategoryPickerCallBack).onCategorySelected(category)
+                        (it as CategoryPickerCallBack).onCategorySelected(category)
                     }
                     dismiss()
                 }
             }
         }
-
     }
 
     private inner class CategoryAdapter(var categories: List<Category>)
@@ -98,6 +106,5 @@ class CategoryPickerFragment: DialogFragment() {
         }
 
         override fun getItemCount(): Int = categories.size
-
     }
 }

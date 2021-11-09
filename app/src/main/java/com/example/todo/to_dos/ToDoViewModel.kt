@@ -8,7 +8,7 @@ class ToDoViewModel: ViewModel() {
 
     init {
         for (i in 0..15){
-            var toDo = ToDo()
+            val toDo = ToDo()
             toDo.title = "To Do ${i+1}"
             toDo.isDone = i % 2 == 0
             toDos += toDo

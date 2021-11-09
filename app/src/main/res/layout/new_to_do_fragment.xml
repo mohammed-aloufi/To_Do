@@ -35,7 +35,9 @@
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            tools:ignore="TextContrastCheck"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/newToDoDescriptionTv"
@@ -49,7 +51,8 @@
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newToDoTitleTv" />
+            app:layout_constraintTop_toBottomOf="@+id/newToDoTitleTv"
+            android:importantForAutofill="no" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/dateButton"
@@ -73,7 +76,8 @@
             app:layout_constraintStart_toEndOf="@+id/dateButton"
             app:layout_constraintTop_toBottomOf="@+id/newToDoDescriptionTv"
             app:srcCompat="@drawable/ic_baseline_inbox_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
+            android:contentDescription="@string/choose_category" />
 
         <ImageButton
             android:id="@+id/cancelNewToDoButton"
@@ -87,7 +91,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_cancel_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            android:contentDescription="@string/cancel" />
 
         <ImageButton
             android:id="@+id/saveNewToDoImageButton"
@@ -101,7 +106,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/newToDoDescriptionTv"
             app:srcCompat="@drawable/ic_baseline_done_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
+            android:contentDescription="@string/save" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

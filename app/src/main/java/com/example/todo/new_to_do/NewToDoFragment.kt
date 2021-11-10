@@ -11,12 +11,14 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.todo.R
 import com.example.todo.cateogry.CategoryPickerFragment
+import com.example.todo.cateogry.CategoryViewModel
 import com.example.todo.database.Category
 import com.example.todo.database.ToDo
 import com.example.todo.to_dos.ToDoViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.*
 
+const val NEW_CATEGORY_KEY = "new"
 class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePickerDialogFragment.DatePickerCallBack, CategoryPickerFragment.CategoryPickerCallBack {
 
     private lateinit var newToDoTileTv: EditText
@@ -27,9 +29,15 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
     private lateinit var saveButton: ImageButton
 
     private var dueDate: Date? = null
+    private var categoryId: UUID? = null
+    private var mainCategory = Category()
 
     private val toDoViewModel by lazy {
         ViewModelProvider(this).get(ToDoViewModel::class.java)
+    }
+
+    private val categoryViewModel by lazy {
+        ViewModelProvider(this).get(CategoryViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -42,10 +50,16 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
     override fun onStart() {
         super.onStart()
         setClickListeners()
+        getMainCategoryId()
     }
+
 
     override fun onClick(v: View?) {
         when(v){
@@ -59,14 +73,16 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
 
     override fun onDateSelected(date: Date) {
         dueDate = date
-        val dateFormat = "EEE, MMM dd"
+        val dateFormat = "EEE, yyyy MMM dd"
         val dateString = android.text.format.DateFormat.format(dateFormat, date)
         dateButton.text = dateString
     }
 
     override fun onCategorySelected(category: Category) {
+        categoryId = category.id
+        val category = category
         val categoryColor = category.color
-//        categoryButton.setBackgroundColor(resources.getColor(categoryColor))
+        categoryButton.setBackgroundColor(resources.getColor(categoryColor))
     }
 
     private fun initViews(view: View){
@@ -94,7 +110,7 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
     private fun handleCategoryButtonPressed(){
         val categoryPicker = CategoryPickerFragment()
         categoryPicker.setTargetFragment(this, 0)
-        categoryPicker.show(parentFragmentManager, "category")
+        categoryPicker.show(parentFragmentManager, NEW_CATEGORY_KEY)
     }
 
     private fun handleSaveButtonPressed(){
@@ -102,10 +118,24 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
         if (!title.isBlank()) {
             val description = newToDoDescriptionTv.text.toString()
             val dueDate = this.dueDate
-            val toDo = ToDo(title = title, description = description, dueDate = dueDate)
-            //TODO : handle category
+            if (categoryId == null){
+                categoryId = mainCategory.id
+            }
+            val toDo = ToDo(title = title, description = description, dueDate = dueDate, categoryId = categoryId)
             toDoViewModel.addToDo(toDo)
+            dismiss()
+        }else {
+            Toast.makeText(context, "A title is required", Toast.LENGTH_SHORT).show()
         }
-        dismiss()
+
+    }
+
+    private fun getMainCategoryId(){
+        categoryViewModel.liveDataMainCategory.observe(
+            viewLifecycleOwner, androidx.lifecycle.Observer {
+                it?.let {
+                    mainCategory = it
+                }
+            })
     }
 }

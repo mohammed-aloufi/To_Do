@@ -6,7 +6,14 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity
+@Entity(
+    foreignKeys = [ForeignKey(
+        entity = Category::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("categoryId"),
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 data class ToDo(
     @PrimaryKey var id: UUID = UUID.randomUUID(),
     var title: String = "",
@@ -14,18 +21,10 @@ data class ToDo(
     var dueDate: Date? = Date(),
     var isDone: Boolean = false,
     var description: String = "",
+    @ColumnInfo(index = true)
     var categoryId: UUID? = UUID.randomUUID()
-//TODO : make categoryId as foreigner key from Category
 )
 
-//(
-//foreignKeys = [ForeignKey(
-//entity = Category::class,
-//parentColumns = arrayOf("id"),
-//childColumns = arrayOf("id"),
-//onDelete = ForeignKey.CASCADE
-//)]
-//)
 
 
-//@ColumnInfo(index = true)
+

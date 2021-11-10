@@ -15,9 +15,9 @@
         <entry key="app/src/main/res/layout/choose_category_fragment.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/choose_category_list_item.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_to_do_detailes.xml" value="0.290763908088159" />
-        <entry key="app/src/main/res/layout/fragment_to_do_list.xml" value="0.29583333333333334" />
+        <entry key="app/src/main/res/layout/fragment_to_do_list.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/new_category_fragment.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/new_to_do_fragment.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/new_to_do_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/to_do_list_item.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/menu/fragment_to_do_menu.xml" value="0.3098958333333333" />
       </map>

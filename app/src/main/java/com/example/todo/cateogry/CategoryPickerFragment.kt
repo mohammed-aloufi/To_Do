@@ -1,17 +1,25 @@
 package com.example.todo.cateogry
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.database.Category
+import com.example.todo.new_to_do.DatePickerDialogFragment
+import com.example.todo.new_to_do.NEW_CATEGORY_KEY
+import com.example.todo.new_to_do.NewToDoFragment
+import com.example.todo.to_dos.EDIT_CATEGORY_TAG
+import com.example.todo.to_dos.EXTRA_ID
 
+var choice_tag = ""
 class CategoryPickerFragment: DialogFragment() {
 
     interface CategoryPickerCallBack{
@@ -33,9 +41,18 @@ class CategoryPickerFragment: DialogFragment() {
 
         initViews(view)
         setLayoutManger()
-        updateCategoryUI()
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        categoryViewModel.liveDataCategory.observe(
+            viewLifecycleOwner, Observer {
+                updateCategoryUI(it)
+            })
+
+        choice_tag = this.tag!!
     }
 
     override fun onStart() {
@@ -52,8 +69,8 @@ class CategoryPickerFragment: DialogFragment() {
         chooseCategoryRv.layoutManager = categoryLayoutManger
     }
 
-    private fun updateCategoryUI(){
-        val categoryAdapter = CategoryAdapter(categoryViewModel.categories)
+    private fun updateCategoryUI(categories: List<Category>){
+        val categoryAdapter = CategoryAdapter(categories)
         chooseCategoryRv.adapter = categoryAdapter
     }
 
@@ -68,22 +85,36 @@ class CategoryPickerFragment: DialogFragment() {
         private val categoryTitleTv: TextView = view.findViewById(R.id.categoryTitleTv)
 
         private lateinit var category: Category
-
         init {
             itemView.setOnClickListener(this)
+
         }
 
         fun bindCategory(category: Category){
-            this.category = category
-//            categoryColorView.setBackgroundColor(resources.getColor(category.color))
-//            categoryTitleTv.text = category.title
+                this.category = category
+                categoryColorView.setBackgroundColor(resources.getColor(category.color))
+                categoryTitleTv.text = category.name
         }
 
         override fun onClick(v: View?) {
             when(v){
                 itemView -> {
                     targetFragment?.let {
-                        (it as CategoryPickerCallBack).onCategorySelected(category)
+                        when(choice_tag){
+                            NEW_CATEGORY_KEY -> {
+                                targetFragment?.let {
+                                    (it as CategoryPickerCallBack).onCategorySelected(category)
+                                }
+                            }
+                            EDIT_CATEGORY_TAG -> {
+                                val args = Bundle()
+                                args.putSerializable(EXTRA_ID, category.id)
+                                val newCategory = CategoryBottomSheetFragment()
+                                newCategory.arguments = args
+                                newCategory.show(parentFragmentManager, EDIT_CATEGORY_TAG)
+                            }
+                            else -> return
+                        }
                     }
                     dismiss()
                 }
@@ -100,6 +131,7 @@ class CategoryPickerFragment: DialogFragment() {
         }
 
         override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+            //TODO: When on edit don't show All
             val category = categories[position]
             holder.bindCategory(category)
         }

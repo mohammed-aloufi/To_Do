@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,18 +11,22 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.example.todo.cateogry.CategoryPickerFragment
+import com.example.todo.cateogry.CategoryViewModel
 import com.example.todo.database.ToDo
 import com.example.todo.new_to_do.DatePickerDialogFragment
 import com.example.todo.to_dos.EXTRA_ID
 import com.example.todo.to_dos.ToDoViewModel
 import java.util.*
 
-const val CRIME_DATE_KEY = "current-date"
+const val DATE_KEY = "due-date"
 class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallBack, View.OnClickListener {
 
     private lateinit var toDoTitleTv: EditText
     private lateinit var toDoDescriptionTv: EditText
+    private lateinit var toDoCreationDateTv: TextView
     private lateinit var toDoDateButton: Button
     private lateinit var toDoCategoryImageButton: ImageButton
     private lateinit var saveUpdatesButton: Button
@@ -33,6 +36,10 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
     private val toDoViewModel by lazy {
         ViewModelProvider(this).get(ToDoViewModel::class.java)
     }
+    private val categoryViewModel by lazy {
+        ViewModelProvider(this).get(CategoryViewModel::class.java)
+    }
+
     private lateinit var toDo: ToDo
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +75,7 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
     private fun initViews(view: View){
         toDoTitleTv = view.findViewById(R.id.toDoDetailTitleTv)
         toDoDescriptionTv = view.findViewById(R.id.toDoDetailDescripTv)
+        toDoCreationDateTv = view.findViewById(R.id.toDoCreationDateTv)
         toDoDateButton = view.findViewById(R.id.toDoDetailDateButton)
         toDoCategoryImageButton = view.findViewById(R.id.toDoDetailCategImageBtn)
         saveUpdatesButton = view.findViewById(R.id.saveUpdatesButton)
@@ -100,6 +108,7 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
 
     private fun setClickListeners(){
         toDoDateButton.setOnClickListener(this)
+        toDoCategoryImageButton.setOnClickListener(this)
         saveUpdatesButton.setOnClickListener(this)
         deleteToDoButton.setOnClickListener(this)
     }
@@ -120,6 +129,7 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
     override fun onClick(v: View?) {
         when(v){
             toDoDateButton -> handleDateButtonPressed()
+            toDoCategoryImageButton -> handleCategoryButtonPressed()
             saveUpdatesButton -> handleSaveButtonPressed()
             deleteToDoButton -> handleDeleteButtonPressed()
         }
@@ -131,12 +141,20 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
                 toDo = it
                 toDoTitleTv.setText(it.title)
                 toDoDescriptionTv.setText(it.description)
+                toDoCreationDateTv.setText(DateFormat.format("yyyy/MM/dd", it.creationDate))
                 toDoDateButton.text = when(toDo.dueDate){
                     null -> getString(R.string.no_date)
                     else -> dateFormat(toDo)
                 }
             }
         })
+    }
+
+    private fun getToDoCategory(categoryId: UUID){
+        //TODO: get the category to set the category button color
+        toDo.categoryId?.let {
+            categoryViewModel.loadCategory(it)
+        }
     }
 
     private fun getToDoFromArguments(){
@@ -146,14 +164,23 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
     }
 
     private fun handleDateButtonPressed(){
-        val args = Bundle()
-        args.putSerializable(CRIME_DATE_KEY, toDo.dueDate)
         val datePicker = DatePickerDialogFragment()
-        datePicker.arguments = args
+        if (toDo.dueDate != null){
+            val args = Bundle()
+            args.putSerializable(DATE_KEY, toDo.dueDate)
+            datePicker.arguments = args
+        }
         datePicker.setTargetFragment(this, 0)
         datePicker.show(parentFragmentManager, "date")
     }
 
+    private fun handleCategoryButtonPressed(){
+        //TODO: handle when user change/select category
+        val categoryPicker = CategoryPickerFragment()
+        categoryPicker.setTargetFragment(this, 0)
+        categoryPicker.show(parentFragmentManager, "category")
+    }
+    
     private fun handleSaveButtonPressed(){
         val title = toDoTitleTv.text.toString()
         if (!title.isBlank()) {

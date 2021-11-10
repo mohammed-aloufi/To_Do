@@ -19,6 +19,10 @@ class ToDoViewModel: ViewModel() {
             toDoRepository.getToDo(it)
         }
 
+    fun getAllByCategoryLiveData(id: UUID): LiveData<List<ToDo>>{
+        return toDoRepository.getAllByCategoryId(id)
+    }
+
     fun loadToDo(toDoId: UUID){
         toDoIdLiveData.value = toDoId
     }

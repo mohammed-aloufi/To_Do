@@ -8,6 +8,7 @@
     <string name="no_date">No Date</string>
     <string name="category_name">Category Name</string>
     <string name="add_new_category_label">Add New Category</string>
+    <string name="edit_category_label">Edit Category</string>
     <string name="new_task_label">New Task</string>
     <string name="category_color_label">Category Color</string>
     <string name="all_category">All</string>
@@ -22,4 +23,5 @@
     <string name="done">Done</string>
     <string name="delete_to_do">Delete</string>
     <string name="no_to_do">You don\'t have any to do</string>
+    <string name="to_do_creation_label">Created:</string>
 </resources>

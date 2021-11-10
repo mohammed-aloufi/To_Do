@@ -11,14 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
+        android:layout_marginBottom="10dp"
         android:background="#009688"
+        android:contentDescription="@string/save"
         android:minWidth="48dp"
         android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:srcCompat="@drawable/ic_baseline_done_24"
-        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
-        android:contentDescription="@string/save" />
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <ImageButton
         android:id="@+id/cancelNewCategoryButton"
@@ -36,12 +38,12 @@
         android:contentDescription="@string/cancel" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/categoryFragmentLabelTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:text="@string/add_new_category_label"
+        tools:text="@string/add_new_category_label"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -63,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/categoryFragmentLabelTv"
         tools:ignore="TextContrastCheck" />
 
     <TextView
@@ -81,15 +83,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newCategoryNameTv" />
 
+    <ImageButton
+        android:id="@+id/deleteCategoryImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#880000"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/saveNewCategoryImageBtn"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:srcCompat="@drawable/ic_baseline_delete_forever_24"
+        tools:ignore="SpeakableTextPresentCheck" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/newCategoryColorRv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/saveNewCategoryImageBtn"
+        app:layout_constraintEnd_toStartOf="@+id/deleteCategoryImageButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">
 

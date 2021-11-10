@@ -7,13 +7,16 @@ import java.util.*
 @Dao
 interface ToDoDao {
 
+    //1- To_Do
     @Query("SELECT * FROM todo")
     fun getAllToDos(): LiveData<List<ToDo>>
 
     @Query("SELECT * FROM todo WHERE id=(:id)")
     fun getToDo(id: UUID): LiveData<ToDo?>
 
-    //1- updating
+    @Query("SELECT * FROM todo WHERE categoryId = :id")
+    fun getAllByCategoryId(id: UUID): LiveData<List<ToDo>>
+
     @Update
     fun updateToDo(toDo: ToDo)
 
@@ -22,4 +25,23 @@ interface ToDoDao {
 
     @Delete
     fun deleteToDo(toDo: ToDo)
+
+    //Category
+    @Query("SELECT * FROM category")
+    fun getAllCategories(): LiveData<List<Category>>
+
+    @Query("SELECT * FROM category WHERE id=(:id)")
+    fun getCategory(id: UUID): LiveData<Category?>
+
+    @Query("SELECT * FROM category WHERE name=('All')")
+    fun getMainCategory(): LiveData<Category?>
+
+    @Insert
+    fun addCategory(category: Category)
+
+    @Update
+    fun updateCategory(category: Category)
+
+    @Delete
+    fun deleteCategory(category: Category)
 }

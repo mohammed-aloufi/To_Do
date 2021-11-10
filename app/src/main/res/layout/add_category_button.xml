@@ -8,19 +8,14 @@
     <ImageButton
         android:id="@+id/addCategoryImageButton"
         android:layout_width="48sp"
-        android:layout_height="38sp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="#FF9800"
+        android:layout_height="match_parent"
+        android:layout_marginTop="1dp"
+        android:background="#00FF9800"
+        android:contentDescription="@string/add_category_btn_description"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_24"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
-        android:contentDescription="@string/add_category_btn_description" />
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

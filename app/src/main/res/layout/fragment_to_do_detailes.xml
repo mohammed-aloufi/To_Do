@@ -19,6 +19,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/to_do_creation_label"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toDoDetailDateButton" />
+
+    <TextView
+        android:id="@+id/toDoCreationDateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/toDoDetailDateButton"
+        tools:text="TextView" />
+
     <EditText
         android:id="@+id/toDoDetailTitleTv"
         android:layout_width="0dp"
@@ -63,26 +87,27 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         tools:text="Name" />
 
+    <ImageButton
+        android:id="@+id/toDoDetailCategImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:minHeight="48dp"
+        android:src="@drawable/ic_baseline_class_24"
+        app:layout_constraintStart_toEndOf="@+id/toDoDetailDateButton"
+        app:layout_constraintTop_toBottomOf="@+id/toDoDetailDescripTv"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/toDoDetailDateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/no_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toDoDetailDescripTv" />
-
-    <ImageButton
-        android:id="@+id/toDoDetailCategImageBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:minHeight="48dp"
-        android:src="@drawable/ic_baseline_class_24"
-        app:layout_constraintStart_toEndOf="@+id/toDoDetailDateButton"
-        app:layout_constraintTop_toTopOf="@+id/toDoDetailDateButton"
-        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/deleteToDoButton"

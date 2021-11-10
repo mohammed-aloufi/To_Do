@@ -60,8 +60,8 @@
         android:layout_width="0dp"
         android:layout_height="1sp"
         android:background="#ED1010"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/rescheduleButton"

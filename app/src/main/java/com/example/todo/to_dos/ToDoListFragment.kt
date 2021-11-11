@@ -238,6 +238,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
 
         private lateinit var toDo: ToDo
         private val dateFormat = "EEE, MMM dd"
+        private val today = Date()
 
         init {
             itemView.setOnClickListener(this)
@@ -247,7 +248,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
 
         fun bind(toDo: ToDo) {
             this.toDo = toDo
-            val today = Date()
 
             toDoIsDoneCheckBox.isChecked = toDo.isDone
             toDoTitleTv.text = toDo.title
@@ -296,7 +296,15 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         override fun onClick(v: View?) {
             when (v) {
                 itemView -> {
-                    toDoDetailsFragmentShow()
+                    if (toDo.dueDate != null){
+                        if (today.after(toDo.dueDate)){
+                            toDoDetailsFragmentShow(EXTRA_RESCHEDULE)
+                        }else{
+                            toDoDetailsFragmentShow()
+                        }
+                    }else{
+                        toDoDetailsFragmentShow()
+                    }
                 }
                 rescheduleToDoBtn -> {
                     toDoDetailsFragmentShow(EXTRA_RESCHEDULE)

@@ -12,9 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.database.Category
+import com.example.todo.database.ToDo
 import com.example.todo.new_to_do.NEW_CATEGORY_KEY
 import com.example.todo.to_dos.EDIT_CATEGORY_TAG
-import com.example.todo.to_dos.EXTRA_ID
+import com.example.todo.to_dos.EXTRA_TO_DO_ID
+import com.example.todo.to_dos.ToDoViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.*
 
@@ -22,35 +24,40 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
 
     private lateinit var categoryFragmentLabelTv: TextView
     private lateinit var newCategoryNameTv: EditText
-    private lateinit var newCategoryColorRv: RecyclerView
+    private lateinit var categoryColorsRv: RecyclerView
     private lateinit var cancelButton: ImageButton
     private lateinit var saveButton: ImageButton
     private lateinit var deleteButton: ImageButton
 
+    private val toDoViewModel by lazy {
+        ViewModelProvider(this).get(ToDoViewModel::class.java)
+    }
     private val categoryViewModel by lazy {
         ViewModelProvider(this).get(CategoryViewModel::class.java)
     }
 
     private var selectedColor = 0
     private lateinit var category: Category
+    private var mainCategoryId: UUID? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.new_category_fragment, container, false)
+        val view = inflater.inflate(R.layout.add_edit_category_fragment, container, false)
 
         initViews(view)
         setViewsBasedOnChoice()
         setLayoutManger()
-        updateCategoryColorUI()
+        setCategoryColorsRvAdapter()
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeCategoryLiveData()
+        getDefaultCategoryId()
     }
     override fun onStart() {
         super.onStart()
@@ -60,15 +67,15 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
     override fun onClick(v: View?) {
         when(v){
             cancelButton -> dismiss()
-            saveButton -> handleSaveButtonPressed()
-            deleteButton -> handleDeleteButtonPressed()
+            saveButton -> handleSaveBtnPressed()
+            deleteButton -> handleDeleteBtnPressed()
         }
     }
 
     private fun initViews(view: View){
         categoryFragmentLabelTv = view.findViewById(R.id.categoryFragmentLabelTv)
         newCategoryNameTv = view.findViewById(R.id.newCategoryNameTv)
-        newCategoryColorRv = view.findViewById(R.id.newCategoryColorRv)
+        categoryColorsRv = view.findViewById(R.id.newCategoryColorRv)
         cancelButton = view.findViewById(R.id.cancelNewCategoryButton)
         saveButton = view.findViewById(R.id.saveNewCategoryImageBtn)
         deleteButton = view.findViewById(R.id.deleteCategoryImageButton)
@@ -88,10 +95,14 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
         }
     }
 
-    private fun getCategoryFromArguments(){
-        category= Category()
-        val categoryId = arguments?.getSerializable(EXTRA_ID) as UUID
-        categoryViewModel.loadCategory(categoryId)
+    private fun setLayoutManger(){
+        val newCategoryColorLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        categoryColorsRv.layoutManager = newCategoryColorLayoutManager
+    }
+
+    private fun setCategoryColorsRvAdapter() {
+        val newCategoryColorsAdapter = CategoryColorsAdapter(categoryViewModel.colors)
+        categoryColorsRv.adapter = newCategoryColorsAdapter
     }
 
     private fun observeCategoryLiveData(){
@@ -103,43 +114,13 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
         })
     }
 
-    private fun handleSaveButtonPressed(){
-        when(this.tag){
-            EDIT_CATEGORY_TAG -> {
-                category.color = selectedColor
-                categoryViewModel.updateCategory(category)
-            }
-            NEW_CATEGORY_KEY -> {
-                val name = newCategoryNameTv.text.toString()
-                if (!name.isBlank()){
-                    val color = when(selectedColor){
-                        0 -> R.color.white
-                        else -> selectedColor
-                    }
-                    val category = Category(name = name, color = color)
-                    categoryViewModel.addCategory(category)
-                    setSelectedColor(0)
-                    dismiss()
-                }else {
-                    Toast.makeText(context, "Category name is required", Toast.LENGTH_SHORT).show()
+    private fun getDefaultCategoryId(){
+        categoryViewModel.liveDataDefaultCategory.observe(
+            viewLifecycleOwner, androidx.lifecycle.Observer {
+                it?.let {
+                    mainCategoryId = it.id
                 }
-            }
-        }
-    }
-
-    private fun handleDeleteButtonPressed(){
-        categoryViewModel.deleteCategory(category)
-        dismiss()
-    }
-
-    private fun setLayoutManger(){
-        val newCategoryColorLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        newCategoryColorRv.layoutManager = newCategoryColorLayoutManager
-    }
-
-    private fun updateCategoryColorUI() {
-        val newCategoryColorAdapter = CategoryColorAdapter(categoryViewModel.colors)
-        newCategoryColorRv.adapter = newCategoryColorAdapter
+            })
     }
 
     private fun setClickListeners(){
@@ -174,6 +155,58 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
         }
     }
 
+    private fun handleSaveBtnPressed(){
+        when(this.tag){
+            EDIT_CATEGORY_TAG -> {
+                category.color = selectedColor
+                categoryViewModel.updateCategory(category)
+            }
+            NEW_CATEGORY_KEY -> {
+                val name = newCategoryNameTv.text.toString()
+                if (!name.isBlank()){
+                    val color = when(selectedColor){
+                        0 -> R.color.white
+                        else -> selectedColor
+                    }
+                    val category = Category(name = name, color = color)
+                    categoryViewModel.addCategory(category)
+                    setSelectedColor(0)
+                    dismiss()
+                }else {
+                    Toast.makeText(context, "Category name is required", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun handleDeleteBtnPressed(){
+        getCategoryToDos(category.id)
+        categoryViewModel.deleteCategory(category)
+    }
+
+    private fun getCategoryFromArguments(){
+        category= Category()
+        val categoryId = arguments?.getSerializable(EXTRA_TO_DO_ID) as UUID
+        categoryViewModel.loadCategory(categoryId)
+    }
+
+    private fun getCategoryToDos(categoryId: UUID){
+        toDoViewModel.liveDataToDo.observe(
+            viewLifecycleOwner, androidx.lifecycle.Observer { list ->
+                changeCategoryToDefault(list.filter { it.categoryId == categoryId })
+            })
+    }
+
+    private fun changeCategoryToDefault(toDos: List<ToDo>){
+        toDos.forEach { toDo ->
+            mainCategoryId?.let {
+                toDo.categoryId = it
+            }
+            toDoViewModel.saveUpdates(toDo)
+        }
+        dismiss()
+    }
+
     fun setSelectedColor(color: Int){
         selectedColor = color
     }
@@ -184,16 +217,15 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
         fun bindCategory(color: Int){
             categoryColorButton.setBackgroundColor(resources.getColor(color))
             categoryColorButton.setOnClickListener {
-//                Toast.makeText(context, "Color Pressed", Toast.LENGTH_SHORT).show()
                 setSelectedColor(color)
             }
         }
     }
 
-    private inner class CategoryColorAdapter(var colors: List<Int>)
+    private inner class CategoryColorsAdapter(var colors: List<Int>)
         : RecyclerView.Adapter<CategoryColorViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryColorViewHolder {
-            val view = layoutInflater.inflate(R.layout.categories_color, parent, false)
+            val view = layoutInflater.inflate(R.layout.categories_colors_list_item, parent, false)
             return CategoryColorViewHolder(view)
         }
 

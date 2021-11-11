@@ -10,8 +10,9 @@ import java.util.*
 
 class ToDoViewModel: ViewModel() {
 
-    var selectedCategory = false
+    var didSelectCategory = false
     var selectedCategoryId: UUID? = null
+    var sortBy = AUTO_SORT
 
     private val toDoRepository = ToDoRepository.get()
     private val toDoIdLiveData = MutableLiveData<UUID>()

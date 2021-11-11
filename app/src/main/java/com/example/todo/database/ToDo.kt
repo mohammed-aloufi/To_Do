@@ -14,7 +14,7 @@ data class ToDo(
     var dueDate: Date? = Date(),
     var isDone: Boolean = false,
     var description: String = "",
-    var categoryId: UUID? = UUID.randomUUID()
+    var categoryId: UUID = UUID.randomUUID()
 )
 
 

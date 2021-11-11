@@ -12,6 +12,7 @@ import java.util.*
 
 class CategoryViewModel: ViewModel() {
 
+    //TODO: consider making it private and set a getter
     val colors = listOf(
         R.color.purple_200,
         R.color.teal_200,
@@ -20,7 +21,7 @@ class CategoryViewModel: ViewModel() {
     private val toDoRepository = ToDoRepository.get()
     private val categoryIdLiveData = MutableLiveData<UUID>()
     val liveDataCategory = toDoRepository.getAllCategories()
-    val liveDataMainCategory = toDoRepository.getMainCategory()
+    val liveDataDefaultCategory = toDoRepository.getMainCategory()
 
     var categoryLiveData: LiveData<Category?> =
         Transformations.switchMap(categoryIdLiveData){

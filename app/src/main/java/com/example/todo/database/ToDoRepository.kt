@@ -19,7 +19,7 @@ class ToDoRepository private constructor(context: Context) {
     private val toDoDao = database.toDoDao()
     private val executor = Executors.newSingleThreadExecutor()
 
-    //To_Do
+    /** To_Do */
     fun getAllToDos(): LiveData<List<ToDo>> = toDoDao.getAllToDos()
     fun getToDo(id: UUID): LiveData<ToDo?> = toDoDao.getToDo(id)
 
@@ -39,7 +39,7 @@ class ToDoRepository private constructor(context: Context) {
         }
     }
 
-    //Category
+    /** Category */
     fun getAllCategories(): LiveData<List<Category>> = toDoDao.getAllCategories()
     fun getCategory(id: UUID): LiveData<Category?> = toDoDao.getCategory(id)
     fun getMainCategory(): LiveData<Category?> = toDoDao.getMainCategory()

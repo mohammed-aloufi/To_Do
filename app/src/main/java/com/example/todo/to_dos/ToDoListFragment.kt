@@ -3,19 +3,15 @@ package com.example.todo.to_dos
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.example.todo.R
-import com.example.todo.ToDoDetailsFragment
+import com.example.todo.*
 import com.example.todo.cateogry.CategoryPickerFragment
 import com.example.todo.database.Category
 import com.example.todo.cateogry.CategoryViewModel
@@ -26,11 +22,12 @@ import com.example.todo.new_to_do.NewToDoFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
-const val EXTRA_ID = "id"
+const val EXTRA_TO_DO_ID = "to do id"
 const val EDIT_CATEGORY_TAG = "edit"
-private const val DID_SELECT_CATEGORY_KEY = "did select"
-private const val SELECTED_CATEGORY_ID_KEY = "category id"
-class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBack {
+const val EXTRA_RESCHEDULE = "reschedule"
+
+class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBack,
+    SortFragment.SortCallBack {
 
     private lateinit var categoriesRecyclerView: RecyclerView
     private lateinit var toDoListRecyclerView: RecyclerView
@@ -54,10 +51,8 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
 
         setHasOptionsMenu(true)
         initViews(view)
-        setLayoutManger()
-
-        (categoriesRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        (toDoListRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        setLayoutMangers()
+        setAnimations()
 
         return view
     }
@@ -85,19 +80,29 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.sortMenuButton -> {
-                Toast.makeText(context, "Sort pressed", Toast.LENGTH_SHORT).show()
+                sortBtnSetClickListener()
                 true
             }
             R.id.editCategoryMenuBtn -> {
-                handleEditCategoryButtonPressed()
+                handleEditCategoryBtnPressed()
                 true
             }
             R.id.app_bar_search -> {
+                //TODO: search feature
                 Toast.makeText(context, "Search pressed", Toast.LENGTH_SHORT).show()
                 true
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onCategorySelected(category: Category) {
+        handleEditCategoryBtnPressed()
+    }
+
+    override fun onSortSelected(sortBy: String) {
+        toDoViewModel.sortBy = sortBy
+        getAllToDos()
     }
 
     private fun initViews(view: View) {
@@ -108,7 +113,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         noToDoTextView = view.findViewById(R.id.noToDoTextView)
     }
 
-    private fun setLayoutManger() {
+    private fun setLayoutMangers() {
         val toDoLayoutManager = LinearLayoutManager(context)
         val categoryLayoutManger =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -117,12 +122,17 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         toDoListRecyclerView.layoutManager = toDoLayoutManager
     }
 
-    private fun getAllToDos(){
+    private fun setAnimations(){
+        (categoriesRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        (toDoListRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+    }
+
+    private fun getAllToDos() {
         toDoViewModel.liveDataToDo.observe(
             viewLifecycleOwner, Observer { list ->
-                if (toDoViewModel.selectedCategory){
+                if (toDoViewModel.didSelectCategory) {
                     updateToDoUI(list.filter { it.categoryId == toDoViewModel.selectedCategoryId })
-                }else {
+                } else {
                     updateToDoUI(list)
                 }
             })
@@ -135,14 +145,16 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         }
     }
 
-    private fun handleEditCategoryButtonPressed(){
+    private fun sortBtnSetClickListener() {
+        val sortFragment = SortFragment()
+        sortFragment.setTargetFragment(this, 0)
+        sortFragment.show(parentFragmentManager, toDoViewModel.sortBy)
+    }
+
+    private fun handleEditCategoryBtnPressed() {
         val categoryPicker = CategoryPickerFragment()
         categoryPicker.setTargetFragment(this, 0)
         categoryPicker.show(parentFragmentManager, EDIT_CATEGORY_TAG)
-    }
-
-    override fun onCategorySelected(category: Category) {
-        handleEditCategoryButtonPressed()
     }
 
     /** UI updates */
@@ -156,14 +168,53 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             noToDoTextView.visibility = View.GONE
             toDoListRecyclerView.visibility = View.VISIBLE
 
-                val toDoAdapter = ToDoAdapter(toDos)
-                toDoListRecyclerView.adapter = toDoAdapter
+            val sortedToDos = sortToDos(toDos)
+            val toDoAdapter = ToDoAdapter(sortedToDos)
+            toDoListRecyclerView.adapter = toDoAdapter
+        }
+    }
+
+    private fun sortToDos(toDos: List<ToDo>): List<ToDo>{
+        if (toDoViewModel.sortBy == SORT_BY_DUE_DATE){
+            return toDos.sortedBy {
+                it.dueDate
+            }.sortedBy {
+                it.isDone
+            }
+        }
+
+        if (toDoViewModel.sortBy == SORT_BY_CREATION_DATE){
+            return toDos.sortedBy {
+                it.creationDate
+            }.sortedBy {
+                it.isDone
+            }
+        }
+
+        if (toDoViewModel.sortBy == SORT_ALPHABETICALLY){
+            return toDos.sortedBy {
+                it.title
+            }.sortedBy {
+                it.isDone
+            }
+        }
+
+        if (toDoViewModel.sortBy == SORT_BY_CATEGORY){
+            return toDos.sortedBy {
+                it.categoryId
+            }.sortedBy {
+                it.isDone
+            }
+        }else{
+            return toDos.sortedBy {
+                it.isDone
+            }
         }
     }
 
     private fun updateCategoryUI(categories: List<Category>) {
-        //creates category 'All' at first run
-        if (categories.count() == 0){
+        //creates default category 'All' at first run
+        if (categories.count() == 0) {
             val category = Category()
             categoryViewModel.addCategory(category)
         }
@@ -190,25 +241,39 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
 
         init {
             itemView.setOnClickListener(this)
+            rescheduleToDoBtn.setOnClickListener(this)
             rescheduleToDoBtn.visibility = View.GONE
         }
 
         fun bind(toDo: ToDo) {
             this.toDo = toDo
+            val today = Date()
+
             toDoIsDoneCheckBox.isChecked = toDo.isDone
             toDoTitleTv.text = toDo.title
-            if (toDo.isDone){
+            if (toDo.isDone) {
                 handleDoneToDos()
             }
+
             when (toDo.dueDate) {
-                null -> toDoDueDateTv.visibility = View.GONE
+                null -> {
+                    toDoDueDateTv.visibility = View.GONE
+                }
                 else -> {
                     val dateString = android.text.format.DateFormat.format(dateFormat, toDo.dueDate)
                     toDoDueDateTv.text = dateString
+
+                    if(today.after(toDo.dueDate)){
+                        handleDoneToDos()
+                        rescheduleToDoBtn.visibility = View.VISIBLE
+                    }else{
+                        rescheduleToDoBtn.visibility = View.GONE
+                    }
+
                 }
             }
 
-            categoriesColors[toDo?.categoryId]?.let {
+            categoriesColors[toDo.categoryId]?.let {
                 toDoCategoryView.setBackgroundColor(resources.getColor(it))
             }
 
@@ -219,7 +284,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             }
         }
 
-        private fun handleDoneToDos(){
+        private fun handleDoneToDos() {
             toDoTitleTv.apply {
                 setTypeface(null, Typeface.ITALIC)
                 paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
@@ -227,25 +292,39 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
                 text
             }
         }
+
         override fun onClick(v: View?) {
             when (v) {
                 itemView -> {
-                    val args = Bundle()
-                    args.putSerializable(
-                        EXTRA_ID,
-                        toDo.id
-                    )
-                    val detailsFragment = ToDoDetailsFragment()
-                    detailsFragment.arguments = args
-
-                    activity?.let {
-                        it.supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.fragmentContainerView, detailsFragment)
-                            .addToBackStack("")
-                            .commit()
-                    }
+                    toDoDetailsFragmentShow()
                 }
+                rescheduleToDoBtn -> {
+                    toDoDetailsFragmentShow(EXTRA_RESCHEDULE)
+                }
+            }
+        }
+
+        private fun toDoDetailsFragmentShow(why: String = "edit"){
+            val args = Bundle()
+            args.putSerializable(
+                EXTRA_TO_DO_ID,
+                toDo.id
+            )
+            if (why == EXTRA_RESCHEDULE){
+                args.putString(
+                    EXTRA_RESCHEDULE,
+                    "true"
+                )
+            }
+            val detailsFragment = ToDoDetailsFragment()
+            detailsFragment.arguments = args
+
+            activity?.let {
+                it.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerView, detailsFragment)
+                    .addToBackStack("")
+                    .commit()
             }
         }
     }
@@ -289,11 +368,11 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
                     lastItemSelectedPos = selectedItemPos
                 }
                 categoriesRecyclerView.adapter?.notifyItemChanged(selectedItemPos)
-                if (selectedItemPos == 0){
-                    toDoViewModel.selectedCategory = false
+                if (selectedItemPos == 0) {
+                    toDoViewModel.didSelectCategory = false
                     toDoViewModel.selectedCategoryId = null
-                }else {
-                    toDoViewModel.selectedCategory = true
+                } else {
+                    toDoViewModel.didSelectCategory = true
                     toDoViewModel.selectedCategoryId = category.id
                 }
                 getAllToDos()
@@ -313,11 +392,11 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             }
         }
 
-        fun defaultBg() {
+        fun categoryNotSelected() {
             selectedView?.setBackgroundColor(resources.getColor(R.color.white))
         }
 
-        fun selectedBg() {
+        fun categorySelected() {
             selectedView?.setBackgroundColor(resources.getColor(R.color.black))
         }
     }
@@ -343,10 +422,9 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             when (getItemViewType(position)) {
                 R.layout.category_list_item -> {
                     if (position == selectedItemPos) {
-                        holder.selectedBg()
-                    }
-                    else {
-                        holder.defaultBg()
+                        holder.categorySelected()
+                    } else {
+                        holder.categoryNotSelected()
                     }
                     val category = categories[position]
                     holder.bindCategory(category)

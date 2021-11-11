@@ -7,7 +7,7 @@ import java.util.*
 @Dao
 interface ToDoDao {
 
-    //1- To_Do
+    /** To_Do */
     @Query("SELECT * FROM todo")
     fun getAllToDos(): LiveData<List<ToDo>>
 
@@ -23,7 +23,7 @@ interface ToDoDao {
     @Delete
     fun deleteToDo(toDo: ToDo)
 
-    //Category
+    /** Category */
     @Query("SELECT * FROM category")
     fun getAllCategories(): LiveData<List<Category>>
 

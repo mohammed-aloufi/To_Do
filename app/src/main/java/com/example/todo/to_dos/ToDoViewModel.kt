@@ -4,14 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.todo.AUTO_SORT
 import com.example.todo.database.ToDo
 import com.example.todo.database.ToDoRepository
 import java.util.*
 
 class ToDoViewModel: ViewModel() {
 
-    var selectedCategory = false
+    var didSelectCategory = false
     var selectedCategoryId: UUID? = null
+    var sortBy = AUTO_SORT
 
     private val toDoRepository = ToDoRepository.get()
     private val toDoIdLiveData = MutableLiveData<UUID>()

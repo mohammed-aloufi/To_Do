@@ -1,7 +1,6 @@
 package com.example.todo.cateogry
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo.R
 import com.example.todo.database.Category
-import com.example.todo.new_to_do.DatePickerDialogFragment
 import com.example.todo.new_to_do.NEW_CATEGORY_KEY
-import com.example.todo.new_to_do.NewToDoFragment
 import com.example.todo.to_dos.EDIT_CATEGORY_TAG
-import com.example.todo.to_dos.EXTRA_ID
+import com.example.todo.to_dos.EXTRA_TO_DO_ID
 
-var choice_tag = ""
+private var choice_tag = ""
 
 class CategoryPickerFragment : DialogFragment() {
 
@@ -38,22 +35,17 @@ class CategoryPickerFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.choose_category_fragment, container, false)
-
+        val view = inflater.inflate(R.layout.category_picker_fragment, container, false)
         initViews(view)
         setLayoutManger()
-
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         choice_tag = this.tag!!
+        observeLiveDataCategory()
 
-        categoryViewModel.liveDataCategory.observe(
-            viewLifecycleOwner, Observer {
-                updateCategoryUI(it)
-            })
     }
 
     override fun onStart() {
@@ -70,10 +62,17 @@ class CategoryPickerFragment : DialogFragment() {
         chooseCategoryRv.layoutManager = categoryLayoutManger
     }
 
+    private fun observeLiveDataCategory(){
+        categoryViewModel.liveDataCategory.observe(
+            viewLifecycleOwner, Observer {
+                updateCategoryUI(it)
+            })
+    }
+
     private fun updateCategoryUI(observerCategories: List<Category>) {
         if (choice_tag == EDIT_CATEGORY_TAG){
             //the user can't edit/delete the all category
-            var categories = mutableListOf<Category>()
+            val categories = mutableListOf<Category>()
             observerCategories.forEach {
                 if (it.name.lowercase() == "all"){
                     return@forEach
@@ -104,7 +103,6 @@ class CategoryPickerFragment : DialogFragment() {
 
         init {
             itemView.setOnClickListener(this)
-
         }
 
         fun bindCategory(category: Category) {
@@ -125,7 +123,7 @@ class CategoryPickerFragment : DialogFragment() {
                             }
                             EDIT_CATEGORY_TAG -> {
                                 val args = Bundle()
-                                args.putSerializable(EXTRA_ID, category.id)
+                                args.putSerializable(EXTRA_TO_DO_ID, category.id)
                                 val newCategory = CategoryBottomSheetFragment()
                                 newCategory.arguments = args
                                 newCategory.show(parentFragmentManager, EDIT_CATEGORY_TAG)
@@ -143,7 +141,7 @@ class CategoryPickerFragment : DialogFragment() {
         RecyclerView.Adapter<CategoryViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
 
-            val view = layoutInflater.inflate(R.layout.choose_category_list_item, parent, false)
+            val view = layoutInflater.inflate(R.layout.category_picker_list_item, parent, false)
             return CategoryViewHolder(view)
         }
 

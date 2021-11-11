@@ -17,6 +17,7 @@ import com.example.todo.cateogry.CategoryPickerFragment
 import com.example.todo.cateogry.CategoryViewModel
 import com.example.todo.database.ToDo
 import com.example.todo.new_to_do.DatePickerDialogFragment
+import com.example.todo.new_to_do.NEW_CATEGORY_KEY
 import com.example.todo.to_dos.EXTRA_ID
 import com.example.todo.to_dos.ToDoViewModel
 import java.util.*
@@ -178,7 +179,7 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
         //TODO: handle when user change/select category
         val categoryPicker = CategoryPickerFragment()
         categoryPicker.setTargetFragment(this, 0)
-        categoryPicker.show(parentFragmentManager, "category")
+        categoryPicker.show(parentFragmentManager, NEW_CATEGORY_KEY)
     }
     
     private fun handleSaveButtonPressed(){

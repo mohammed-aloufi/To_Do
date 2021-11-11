@@ -22,7 +22,6 @@ class ToDoRepository private constructor(context: Context) {
     //To_Do
     fun getAllToDos(): LiveData<List<ToDo>> = toDoDao.getAllToDos()
     fun getToDo(id: UUID): LiveData<ToDo?> = toDoDao.getToDo(id)
-    fun getAllByCategoryId(id: UUID): LiveData<List<ToDo>> = toDoDao.getAllByCategoryId(id)
 
     fun updateToDo(toDo: ToDo) {
         executor.execute {

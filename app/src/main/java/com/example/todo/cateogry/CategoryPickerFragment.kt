@@ -20,9 +20,10 @@ import com.example.todo.to_dos.EDIT_CATEGORY_TAG
 import com.example.todo.to_dos.EXTRA_ID
 
 var choice_tag = ""
-class CategoryPickerFragment: DialogFragment() {
 
-    interface CategoryPickerCallBack{
+class CategoryPickerFragment : DialogFragment() {
+
+    interface CategoryPickerCallBack {
         fun onCategorySelected(category: Category)
     }
 
@@ -47,12 +48,12 @@ class CategoryPickerFragment: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        choice_tag = this.tag!!
+
         categoryViewModel.liveDataCategory.observe(
             viewLifecycleOwner, Observer {
                 updateCategoryUI(it)
             })
-
-        choice_tag = this.tag!!
     }
 
     override fun onStart() {
@@ -60,47 +61,63 @@ class CategoryPickerFragment: DialogFragment() {
         setDialogWidth()
     }
 
-    private fun initViews(view: View){
+    private fun initViews(view: View) {
         chooseCategoryRv = view.findViewById(R.id.chooseCategoryRv)
     }
 
-    private fun setLayoutManger(){
+    private fun setLayoutManger() {
         val categoryLayoutManger = LinearLayoutManager(context)
         chooseCategoryRv.layoutManager = categoryLayoutManger
     }
 
-    private fun updateCategoryUI(categories: List<Category>){
-        val categoryAdapter = CategoryAdapter(categories)
-        chooseCategoryRv.adapter = categoryAdapter
+    private fun updateCategoryUI(observerCategories: List<Category>) {
+        if (choice_tag == EDIT_CATEGORY_TAG){
+            //the user can't edit/delete the all category
+            var categories = mutableListOf<Category>()
+            observerCategories.forEach {
+                if (it.name.lowercase() == "all"){
+                    return@forEach
+                }else{
+                    categories.add(it)
+                }
+            }
+            val categoryAdapter = CategoryAdapter(categories)
+            chooseCategoryRv.adapter = categoryAdapter
+        }else {
+            val categoryAdapter = CategoryAdapter(observerCategories)
+            chooseCategoryRv.adapter = categoryAdapter
+        }
     }
 
-    private fun setDialogWidth(){
+    private fun setDialogWidth() {
         val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
         dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     /** CategoriesRecyclerView's ViewHolder & Adapter */
-    private inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
         private val categoryColorView: View = view.findViewById(R.id.categoryColorView)
         private val categoryTitleTv: TextView = view.findViewById(R.id.categoryTitleTv)
 
         private lateinit var category: Category
+
         init {
             itemView.setOnClickListener(this)
 
         }
 
-        fun bindCategory(category: Category){
-                this.category = category
-                categoryColorView.setBackgroundColor(resources.getColor(category.color))
-                categoryTitleTv.text = category.name
+        fun bindCategory(category: Category) {
+            this.category = category
+            categoryColorView.setBackgroundColor(resources.getColor(category.color))
+            categoryTitleTv.text = category.name
         }
 
         override fun onClick(v: View?) {
-            when(v){
+            when (v) {
                 itemView -> {
                     targetFragment?.let {
-                        when(choice_tag){
+                        when (choice_tag) {
                             NEW_CATEGORY_KEY -> {
                                 targetFragment?.let {
                                     (it as CategoryPickerCallBack).onCategorySelected(category)
@@ -122,8 +139,8 @@ class CategoryPickerFragment: DialogFragment() {
         }
     }
 
-    private inner class CategoryAdapter(var categories: List<Category>)
-        : RecyclerView.Adapter<CategoryViewHolder>() {
+    private inner class CategoryAdapter(var categories: List<Category>) :
+        RecyclerView.Adapter<CategoryViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
 
             val view = layoutInflater.inflate(R.layout.choose_category_list_item, parent, false)
@@ -131,7 +148,6 @@ class CategoryPickerFragment: DialogFragment() {
         }
 
         override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-            //TODO: When on edit don't show All
             val category = categories[position]
             holder.bindCategory(category)
         }

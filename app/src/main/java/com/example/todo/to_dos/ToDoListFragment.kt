@@ -1,10 +1,14 @@
 package com.example.todo.to_dos
 
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +28,8 @@ import java.util.*
 
 const val EXTRA_ID = "id"
 const val EDIT_CATEGORY_TAG = "edit"
-
+private const val DID_SELECT_CATEGORY_KEY = "did select"
+private const val SELECTED_CATEGORY_ID_KEY = "category id"
 class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBack {
 
     private lateinit var categoriesRecyclerView: RecyclerView
@@ -39,8 +44,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
     private val categoryViewModel by lazy {
         ViewModelProvider(this).get(CategoryViewModel::class.java)
     }
-//    private val category = Category()
-
     private var categoriesColors: MutableMap<UUID, Int> = mutableMapOf()
 
     override fun onCreateView(
@@ -52,14 +55,16 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         setHasOptionsMenu(true)
         initViews(view)
         setLayoutManger()
+
         (categoriesRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        (toDoListRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getAllToDos()
-
         categoryViewModel.liveDataCategory.observe(
             viewLifecycleOwner, Observer {
                 updateCategoryUI(it)
@@ -93,7 +98,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             }
             else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun initViews(view: View) {
@@ -115,14 +119,12 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
 
     private fun getAllToDos(){
         toDoViewModel.liveDataToDo.observe(
-            viewLifecycleOwner, Observer {
-                updateToDoUI(it)
-            })
-    }
-    private fun getAllByCategory(id: UUID){
-        toDoViewModel.getAllByCategoryLiveData(id).observe(
-            viewLifecycleOwner, Observer {
-                updateToDoUI(it)
+            viewLifecycleOwner, Observer { list ->
+                if (toDoViewModel.selectedCategory){
+                    updateToDoUI(list.filter { it.categoryId == toDoViewModel.selectedCategoryId })
+                }else {
+                    updateToDoUI(list)
+                }
             })
     }
 
@@ -153,8 +155,9 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             emptyImageView.visibility = View.GONE
             noToDoTextView.visibility = View.GONE
             toDoListRecyclerView.visibility = View.VISIBLE
-            val toDoAdapter = ToDoAdapter(toDos)
-            toDoListRecyclerView.adapter = toDoAdapter
+
+                val toDoAdapter = ToDoAdapter(toDos)
+                toDoListRecyclerView.adapter = toDoAdapter
         }
     }
 
@@ -172,8 +175,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         }
     }
 
-    //TODO: !!!!BUG!!!! when user go to details and delete or create new category while specific category selected it shows All's to dos in the selected category
-    //TODO: do more testing on that
     /** toDoRecyclerView's ViewHolder & Adapter */
     private inner class ToDoViewHolder(view: View) : RecyclerView.ViewHolder(view),
         View.OnClickListener {
@@ -194,10 +195,11 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
 
         fun bind(toDo: ToDo) {
             this.toDo = toDo
-            //TODO: change toDo.isDone in database when toDoIsDoneCheckBox.isChecked (true/false)
             toDoIsDoneCheckBox.isChecked = toDo.isDone
             toDoTitleTv.text = toDo.title
-
+            if (toDo.isDone){
+                handleDoneToDos()
+            }
             when (toDo.dueDate) {
                 null -> toDoDueDateTv.visibility = View.GONE
                 else -> {
@@ -209,8 +211,22 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             categoriesColors[toDo?.categoryId]?.let {
                 toDoCategoryView.setBackgroundColor(resources.getColor(it))
             }
+
+            toDoIsDoneCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                toDo.isDone = isChecked
+                toDoViewModel.saveUpdates(toDo)
+                getAllToDos()
+            }
         }
 
+        private fun handleDoneToDos(){
+            toDoTitleTv.apply {
+                setTypeface(null, Typeface.ITALIC)
+                paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                setTextColor(resources.getColor(R.color.gray))
+                text
+            }
+        }
         override fun onClick(v: View?) {
             when (v) {
                 itemView -> {
@@ -266,18 +282,21 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         init {
             categoryButton?.setOnClickListener {
                 selectedItemPos = adapterPosition
-                if (lastItemSelectedPos == -1)
+                if (lastItemSelectedPos == -1) {
                     lastItemSelectedPos = selectedItemPos
-                else {
+                } else {
                     categoriesRecyclerView.adapter?.notifyItemChanged(lastItemSelectedPos)
                     lastItemSelectedPos = selectedItemPos
                 }
                 categoriesRecyclerView.adapter?.notifyItemChanged(selectedItemPos)
                 if (selectedItemPos == 0){
-                    getAllToDos()
+                    toDoViewModel.selectedCategory = false
+                    toDoViewModel.selectedCategoryId = null
                 }else {
-                    getAllByCategory(category.id)
+                    toDoViewModel.selectedCategory = true
+                    toDoViewModel.selectedCategoryId = category.id
                 }
+                getAllToDos()
             }
         }
 
@@ -325,7 +344,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
                 R.layout.category_list_item -> {
                     if (position == selectedItemPos) {
                         holder.selectedBg()
-//                        selectedCategory(categories[position].id)
                     }
                     else {
                         holder.defaultBg()

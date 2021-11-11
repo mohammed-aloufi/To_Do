@@ -10,6 +10,9 @@ import java.util.*
 
 class ToDoViewModel: ViewModel() {
 
+    var selectedCategory = false
+    var selectedCategoryId: UUID? = null
+
     private val toDoRepository = ToDoRepository.get()
     private val toDoIdLiveData = MutableLiveData<UUID>()
     val liveDataToDo = toDoRepository.getAllToDos()
@@ -18,10 +21,6 @@ class ToDoViewModel: ViewModel() {
         Transformations.switchMap(toDoIdLiveData){
             toDoRepository.getToDo(it)
         }
-
-    fun getAllByCategoryLiveData(id: UUID): LiveData<List<ToDo>>{
-        return toDoRepository.getAllByCategoryId(id)
-    }
 
     fun loadToDo(toDoId: UUID){
         toDoIdLiveData.value = toDoId

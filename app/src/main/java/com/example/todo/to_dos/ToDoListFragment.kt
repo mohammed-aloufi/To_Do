@@ -390,7 +390,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         fun bindCategory(category: Category) {
             this.category = category
             categoryButton?.text = category.name
-            categoryButton?.setBackgroundColor(resources.getColor(category.color))
         }
 
         fun bindAddButton() {

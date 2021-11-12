@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="yellow">#ffb700</color>
     <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
@@ -9,4 +9,19 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#3333ff</color>
     <color name="gray">#4d4d4d</color>
+    <color name="cultured">#F8F9FA</color>
+    <color name="charleston_green">#212529</color>
+    <color name="prussian_blue">#023047</color>
+
+    <!--  Category colors  -->
+    <color name="category_color_blue">#072ac8</color>
+    <color name="category_color_orange">#fb8500</color>
+    <color name="category_color_yellow">#ffd60a</color>
+    <color name="category_color_red">#ff002b</color>
+    <color name="category_color_pink">#f7aef8</color>
+    <color name="category_color_purple">#6b1bc5</color>
+    <color name="category_color_green">#007f5f</color>
+    <color name="category_color_light_blue">#48cae4</color>
+    <color name="category_color_brown">#7f5539</color>
+    <color name="category_color_none">@color/cultured</color>
 </resources>

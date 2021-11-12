@@ -71,7 +71,7 @@ class CategoryPickerFragment : DialogFragment() {
 
     private fun updateCategoryUI(observerCategories: List<Category>) {
         if (choice_tag == EDIT_CATEGORY_TAG){
-            //the user can't edit/delete the all category
+            //the user can't edit/delete the default category
             val categories = mutableListOf<Category>()
             observerCategories.forEach {
                 if (it.name.lowercase() == "all"){
@@ -107,8 +107,23 @@ class CategoryPickerFragment : DialogFragment() {
 
         fun bindCategory(category: Category) {
             this.category = category
-            categoryColorView.setBackgroundColor(resources.getColor(category.color))
+            when(category.color){
+                R.color.category_color_blue -> setCircleColor(R.drawable.color_blue)
+                R.color.category_color_orange -> setCircleColor(R.drawable.color_orange)
+                R.color.category_color_yellow -> setCircleColor(R.drawable.color_yellow)
+                R.color.category_color_red -> setCircleColor(R.drawable.color_red)
+                R.color.category_color_pink -> setCircleColor(R.drawable.color_pink)
+                R.color.category_color_purple -> setCircleColor(R.drawable.color_purple)
+                R.color.category_color_green -> setCircleColor(R.drawable.color_green)
+                R.color.category_color_light_blue -> setCircleColor(R.drawable.color_light_blue)
+                R.color.category_color_brown -> setCircleColor(R.drawable.color_brown)
+                else -> setCircleColor(R.drawable.color_none)
+            }
             categoryTitleTv.text = category.name
+        }
+
+        fun setCircleColor(resId: Int){
+            categoryColorView.setBackgroundResource(resId)
         }
 
         override fun onClick(v: View?) {

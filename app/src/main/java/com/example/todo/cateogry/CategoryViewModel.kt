@@ -13,11 +13,32 @@ import java.util.*
 class CategoryViewModel: ViewModel() {
 
     //TODO: consider making it private and set a getter
-    val colors = listOf(
-        R.color.purple_200,
-        R.color.teal_200,
-        R.color.purple_700
+    val colorMap = mapOf(
+        R.color.category_color_blue to R.drawable.color_blue,
+        R.color.category_color_orange to R.drawable.color_orange,
+        R.color.category_color_yellow to R.drawable.color_yellow,
+        R.color.category_color_red to R.drawable.color_red,
+        R.color.category_color_pink to R.drawable.color_pink,
+        R.color.category_color_purple to R.drawable.color_purple,
+        R.color.category_color_green to R.drawable.color_green,
+        R.color.category_color_light_blue to R.drawable.color_light_blue,
+        R.color.category_color_brown to R.drawable.color_brown,
+        R.color.category_color_none to R.drawable.color_none,
     )
+
+    val colors = listOf(
+        R.color.category_color_blue,
+        R.color.category_color_orange,
+        R.color.category_color_yellow,
+        R.color.category_color_red,
+        R.color.category_color_pink,
+        R.color.category_color_purple,
+        R.color.category_color_green,
+        R.color.category_color_light_blue,
+        R.color.category_color_brown,
+        R.color.category_color_none
+    )
+
     private val toDoRepository = ToDoRepository.get()
     private val categoryIdLiveData = MutableLiveData<UUID>()
     val liveDataCategory = toDoRepository.getAllCategories()

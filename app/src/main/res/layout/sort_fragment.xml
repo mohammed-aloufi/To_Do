@@ -6,7 +6,6 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,8 +13,8 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"
             android:text="@string/sort_by_label"
             android:textColor="#000000"
             android:textSize="18sp"
@@ -27,8 +26,8 @@
             android:id="@+id/cancelSortButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
             android:background="#02FFFFFF"
             android:contentDescription="@string/cancel"
             android:minWidth="48dp"
@@ -51,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <RadioGroup
-            android:id="@+id/sortRadioGroup"
+            android:id="@+id/radioGroup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
@@ -67,30 +66,40 @@
                 android:id="@+id/autoSortRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:textSize="16sp"
                 android:text="@string/automatic_sorting_label" />
 
             <RadioButton
                 android:id="@+id/byDueDateRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:textSize="16sp"
                 android:text="@string/due_date_label" />
 
             <RadioButton
                 android:id="@+id/byCreationDateRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:textSize="16sp"
                 android:text="@string/creation_date_label" />
 
             <RadioButton
                 android:id="@+id/byAlphabeticalRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:textSize="16sp"
                 android:text="@string/alphabetical_sort_label" />
 
             <RadioButton
                 android:id="@+id/byCategoryRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:textSize="16sp"
                 android:text="@string/category_sort_label" />
         </RadioGroup>
 

@@ -9,5 +9,5 @@ import java.util.*
 data class Category(
     @PrimaryKey var id: UUID = UUID.randomUUID(),
     var name: String = "All",
-    var color: Int = R.color.blue
+    var color: Int = R.color.category_color_none
 )

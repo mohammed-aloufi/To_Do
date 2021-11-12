@@ -26,7 +26,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:background="#E11010"
+        android:background="@drawable/color_none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/isDoneCheckBox"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
+        android:fontFamily="sans-serif"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/toDoCategoryView"

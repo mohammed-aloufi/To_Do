@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textView2"
@@ -31,13 +31,13 @@
             android:layout_marginEnd="15dp"
             android:ems="10"
             android:hint="@string/new_to_do_title"
+            android:importantForAutofill="no"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
-            tools:ignore="TextContrastCheck"
-            android:importantForAutofill="no" />
+            tools:ignore="TextContrastCheck" />
 
         <EditText
             android:id="@+id/newToDoDescriptionTv"
@@ -47,37 +47,12 @@
             android:layout_marginEnd="15dp"
             android:ems="10"
             android:hint="@string/new_to_do_description"
+            android:importantForAutofill="no"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newToDoTitleTv"
-            android:importantForAutofill="no" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/dateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="20dp"
-            android:text="@string/no_date"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newToDoDescriptionTv" />
-
-        <ImageButton
-            android:id="@+id/categoryImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:minHeight="48dp"
-            app:layout_constraintStart_toEndOf="@+id/dateButton"
-            app:layout_constraintTop_toBottomOf="@+id/newToDoDescriptionTv"
-            app:srcCompat="@drawable/ic_baseline_inbox_24"
-            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
-            android:contentDescription="@string/choose_category" />
+            app:layout_constraintTop_toBottomOf="@+id/newToDoTitleTv" />
 
         <ImageButton
             android:id="@+id/cancelNewToDoButton"
@@ -86,28 +61,61 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:background="#02FFFFFF"
+            android:contentDescription="@string/cancel"
             android:minWidth="48dp"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_cancel_24"
-            tools:ignore="SpeakableTextPresentCheck"
-            android:contentDescription="@string/cancel" />
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/saveNewToDoImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
-            android:background="#009688"
+            android:background="@drawable/circle"
+            android:contentDescription="@string/save"
             android:minWidth="48dp"
             android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/newToDoDescriptionTv"
-            app:srcCompat="@drawable/ic_baseline_done_24"
-            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck"
-            android:contentDescription="@string/save" />
+            app:srcCompat="@drawable/ic_baseline_arrow_upward_24"
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newToDoDescriptionTv">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/dateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40sp"
+                android:layout_marginRight="10sp"
+                android:background="@drawable/button_style"
+                android:paddingStart="15sp"
+                android:paddingEnd="15sp"
+                android:text="@string/no_date"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <ImageButton
+                android:id="@+id/categoryImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/choose_category"
+                android:minHeight="48dp"
+                app:srcCompat="@drawable/ic_baseline_inbox_24"
+                tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

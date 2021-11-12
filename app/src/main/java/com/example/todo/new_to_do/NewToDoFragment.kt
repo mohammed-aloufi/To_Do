@@ -68,7 +68,7 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
 
     override fun onDateSelected(date: Date) {
         dueDate = date
-        val dateFormat = "EEE, yyyy MMM dd"
+        val dateFormat = "EEE, MMM dd"
         val dateString = android.text.format.DateFormat.format(dateFormat, date)
         dateButton.text = dateString
     }

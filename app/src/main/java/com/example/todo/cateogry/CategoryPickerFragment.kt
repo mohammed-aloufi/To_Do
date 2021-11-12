@@ -1,10 +1,14 @@
 package com.example.todo.cateogry
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.marginBottom
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -38,6 +42,9 @@ class CategoryPickerFragment : DialogFragment() {
         val view = inflater.inflate(R.layout.category_picker_fragment, container, false)
         initViews(view)
         setLayoutManger()
+        if (dialog != null && dialog!!.window != null){
+            dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
         return view
     }
 
@@ -46,11 +53,6 @@ class CategoryPickerFragment : DialogFragment() {
         choice_tag = this.tag!!
         observeLiveDataCategory()
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setDialogWidth()
     }
 
     private fun initViews(view: View) {
@@ -88,11 +90,6 @@ class CategoryPickerFragment : DialogFragment() {
         }
     }
 
-    private fun setDialogWidth() {
-        val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
-        dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
-    }
-
     /** CategoriesRecyclerView's ViewHolder & Adapter */
     private inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view),
         View.OnClickListener {
@@ -107,23 +104,10 @@ class CategoryPickerFragment : DialogFragment() {
 
         fun bindCategory(category: Category) {
             this.category = category
-            when(category.color){
-                R.color.category_color_blue -> setCircleColor(R.drawable.color_blue)
-                R.color.category_color_orange -> setCircleColor(R.drawable.color_orange)
-                R.color.category_color_yellow -> setCircleColor(R.drawable.color_yellow)
-                R.color.category_color_red -> setCircleColor(R.drawable.color_red)
-                R.color.category_color_pink -> setCircleColor(R.drawable.color_pink)
-                R.color.category_color_purple -> setCircleColor(R.drawable.color_purple)
-                R.color.category_color_green -> setCircleColor(R.drawable.color_green)
-                R.color.category_color_light_blue -> setCircleColor(R.drawable.color_light_blue)
-                R.color.category_color_brown -> setCircleColor(R.drawable.color_brown)
-                else -> setCircleColor(R.drawable.color_none)
+            categoryViewModel.colorMap[category.color]?.let {
+                categoryColorView.setBackgroundResource(it)
             }
             categoryTitleTv.text = category.name
-        }
-
-        fun setCircleColor(resId: Int){
-            categoryColorView.setBackgroundResource(resId)
         }
 
         override fun onClick(v: View?) {
@@ -163,6 +147,7 @@ class CategoryPickerFragment : DialogFragment() {
         override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
             val category = categories[position]
             holder.bindCategory(category)
+
         }
 
         override fun getItemCount(): Int = categories.size

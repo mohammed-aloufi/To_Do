@@ -12,7 +12,7 @@ import java.util.*
 
 class CategoryViewModel: ViewModel() {
 
-    //TODO: consider making it private and set a getter
+    //TODO: make a fun returning all values and delete the colors list
     val colorMap = mapOf(
         R.color.category_color_blue to R.drawable.color_blue,
         R.color.category_color_orange to R.drawable.color_orange,

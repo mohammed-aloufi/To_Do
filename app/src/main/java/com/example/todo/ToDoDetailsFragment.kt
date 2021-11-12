@@ -93,7 +93,8 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
 
     override fun onCategorySelected(category: Category) {
         toDo.categoryId = category.id
-        toDoCategoryImageButton.setBackgroundColor(resources.getColor(category.color))
+        val colorDrawable = categoryViewModel.colorMap.getValue(category.color)
+        toDoCategoryImageButton.setBackgroundResource(colorDrawable)
     }
 
     private fun initViews(view: View){

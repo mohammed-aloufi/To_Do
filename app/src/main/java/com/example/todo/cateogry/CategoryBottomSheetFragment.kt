@@ -154,7 +154,7 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
                 val name = newCategoryNameTv.text.toString()
                 if (!name.isBlank()){
                     val color = when(selectedColor){
-                        0 -> R.color.white
+                        0 -> R.color.category_color_none
                         else -> selectedColor
                     }
                     val category = Category(name = name, color = color)

@@ -14,6 +14,7 @@ import com.example.todo.database.ToDo
 import com.example.todo.new_to_do.NEW_CATEGORY_KEY
 import com.example.todo.to_dos.EDIT_CATEGORY_TAG
 import com.example.todo.to_dos.EXTRA_TO_DO_ID
+import com.example.todo.to_dos.ToDoListFragment
 import com.example.todo.to_dos.ToDoViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.*
@@ -150,6 +151,7 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
             EDIT_CATEGORY_TAG -> {
                 category.color = selectedColor
                 categoryViewModel.updateCategory(category)
+                dismiss()
             }
             NEW_CATEGORY_KEY -> {
                 val name = newCategoryNameTv.text.toString()

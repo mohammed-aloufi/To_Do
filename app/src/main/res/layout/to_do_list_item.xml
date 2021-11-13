@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         style="@style/CustomCheckbox02"
-        android:buttonTint="@color/black"
         android:gravity="center"
         android:scaleX="0.8"
         android:scaleY="0.8"

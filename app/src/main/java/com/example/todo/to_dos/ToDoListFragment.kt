@@ -33,7 +33,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
     private lateinit var toDoListRecyclerView: RecyclerView
     private lateinit var newToDoActionButton: FloatingActionButton
     private lateinit var emptyImageView: ImageView
-    private lateinit var noToDoTextView: TextView
 
     private val toDoViewModel by lazy {
         ViewModelProvider(this).get(ToDoViewModel::class.java)
@@ -85,6 +84,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             }
             R.id.editCategoryMenuBtn -> {
                 handleEditCategoryBtnPressed()
+                onPause()
                 true
             }
             R.id.app_bar_search -> {
@@ -110,7 +110,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         toDoListRecyclerView = view.findViewById(R.id.toDoListRecyclerView)
         newToDoActionButton = view.findViewById(R.id.newToDoActionButton)
         emptyImageView = view.findViewById(R.id.emptyImageView)
-        noToDoTextView = view.findViewById(R.id.noToDoTextView)
     }
 
     private fun setLayoutMangers() {
@@ -162,10 +161,8 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         if (toDos.isEmpty()) {
             toDoListRecyclerView.visibility = View.GONE
             emptyImageView.visibility = View.VISIBLE
-            noToDoTextView.visibility = View.VISIBLE
         } else {
             emptyImageView.visibility = View.GONE
-            noToDoTextView.visibility = View.GONE
             toDoListRecyclerView.visibility = View.VISIBLE
 
             val sortedToDos = sortToDos(toDos)

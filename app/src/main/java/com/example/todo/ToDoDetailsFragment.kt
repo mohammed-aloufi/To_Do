@@ -30,8 +30,8 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
     private lateinit var toDoCreationDateTv: TextView
     private lateinit var toDoDateButton: Button
     private lateinit var toDoCategoryImageButton: ImageButton
-    private lateinit var saveUpdatesButton: Button
-    private lateinit var deleteToDoButton: Button
+    private lateinit var saveUpdatesButton: ImageButton
+    private lateinit var deleteToDoButton: ImageButton
     private lateinit var rescheduleLabelTv: TextView
 
     private val toDoViewModel by lazy {
@@ -103,7 +103,7 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
         toDoCreationDateTv = view.findViewById(R.id.toDoCreationDateTv)
         toDoDateButton = view.findViewById(R.id.toDoDetailDateButton)
         toDoCategoryImageButton = view.findViewById(R.id.toDoDetailCategImageBtn)
-        saveUpdatesButton = view.findViewById(R.id.saveUpdatesButton)
+        saveUpdatesButton = view.findViewById(R.id.saveUpdateButton)
         deleteToDoButton = view.findViewById(R.id.deleteToDoButton)
         rescheduleLabelTv = view.findViewById(R.id.rescheduleLabelTv)
         rescheduleLabelTv.visibility = View.GONE
@@ -146,7 +146,7 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
                 toDo = it
                 toDoTitleTv.setText(it.title)
                 toDoDescriptionTv.setText(it.description)
-                toDoCreationDateTv.setText(DateFormat.format("yyyy/MM/dd", it.creationDate))
+                toDoCreationDateTv.text = DateFormat.format("yyyy/MM/dd", it.creationDate)
                 toDoDateButton.text = when(toDo.dueDate){
                     null -> getString(R.string.no_date)
                     else -> dateFormat(toDo)
@@ -160,7 +160,7 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
         categoryViewModel.loadCategory(categoryId)
         categoryViewModel.categoryLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it?.let {
-                toDoCategoryImageButton.setBackgroundColor(resources.getColor(it.color))
+                toDoCategoryImageButton.setBackgroundResource(categoryViewModel.colorMap.getValue(it.color))
                 Log.d("Color", it.color.toString())
             }
         })

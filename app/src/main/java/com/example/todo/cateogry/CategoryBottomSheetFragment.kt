@@ -72,7 +72,7 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
     private fun initViews(view: View){
         categoryFragmentLabelTv = view.findViewById(R.id.categoryFragmentLabelTv)
         newCategoryNameTv = view.findViewById(R.id.newCategoryNameTv)
-        cancelButton = view.findViewById(R.id.cancelNewCategoryButton)
+        cancelButton = view.findViewById(R.id.cancelButton)
         chooseColorButton = view.findViewById(R.id.chooseColorButton)
         saveButton = view.findViewById(R.id.saveNewCategoryImageBtn)
         deleteButton = view.findViewById(R.id.deleteCategoryImageButton)
@@ -98,6 +98,7 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
             it?.let {
                 category = it
                 newCategoryNameTv.setText(it.name)
+                chooseColorButton.setBackgroundResource(categoryViewModel.colorMap.getValue(it.color))
             }
         })
     }
@@ -159,6 +160,7 @@ class CategoryBottomSheetFragment: BottomSheetDialogFragment(), View.OnClickList
                     }
                     val category = Category(name = name, color = color)
                     categoryViewModel.addCategory(category)
+
                     dismiss()
                 }else {
                     Toast.makeText(context, "Category name is required", Toast.LENGTH_SHORT).show()

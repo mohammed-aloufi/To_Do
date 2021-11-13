@@ -12,6 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        style="@style/CustomCheckbox02"
+        android:buttonTint="@color/black"
         android:gravity="center"
         android:scaleX="0.8"
         android:scaleY="0.8"
@@ -66,17 +68,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageButton
         android:id="@+id/rescheduleButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:background="#92C61111"
-        android:text="@string/reschedule_to_do_btn"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="15dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/reschedule_label"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TextContrastCheck" />
+        app:srcCompat="@drawable/ic_baseline_error_outline_24"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,TouchTargetSizeCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

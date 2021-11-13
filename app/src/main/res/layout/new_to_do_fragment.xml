@@ -99,22 +99,26 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/dateButton"
                 android:layout_width="wrap_content"
-                android:layout_height="40sp"
+                android:layout_height="41sp"
                 android:layout_marginRight="10sp"
                 android:background="@drawable/button_style"
                 android:paddingStart="15sp"
                 android:paddingEnd="15sp"
                 android:text="@string/no_date"
+                android:textColor="#0277BD"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <ImageButton
                 android:id="@+id/categoryImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:background="@drawable/color_none"
                 android:contentDescription="@string/choose_category"
+                android:minWidth="48dp"
                 android:minHeight="48dp"
-                app:srcCompat="@drawable/ic_baseline_inbox_24"
-                tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+                app:srcCompat="@drawable/ic_baseline_folder_24"
+                tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,TouchTargetSizeCheck" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

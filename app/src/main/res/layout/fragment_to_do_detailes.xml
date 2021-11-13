@@ -30,7 +30,7 @@
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toDoDetailDateButton" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <TextView
         android:id="@+id/toDoCreationDateTv"
@@ -41,7 +41,7 @@
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toBottomOf="@+id/toDoDetailDateButton"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         tools:text="TextView" />
 
     <EditText
@@ -88,53 +88,70 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         tools:text="Name" />
 
-    <ImageButton
-        android:id="@+id/toDoDetailCategImageBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:minHeight="48dp"
-        android:src="@drawable/ic_baseline_class_24"
-        app:layout_constraintStart_toEndOf="@+id/toDoDetailDateButton"
-        app:layout_constraintTop_toBottomOf="@+id/toDoDetailDescripTv"
-        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/toDoDetailDateButton"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/no_date"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toDoDetailDescripTv" />
+        app:layout_constraintTop_toBottomOf="@+id/toDoDetailDescripTv">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/deleteToDoButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="30dp"
-        android:background="#F44336"
-        android:text="@string/delete_to_do"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/toDoDetailDateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="41sp"
+            android:layout_marginRight="10sp"
+            android:background="@drawable/button_style"
+            android:paddingStart="15sp"
+            android:paddingEnd="15sp"
+            android:text="@string/no_date"
+            android:textColor="#0277BD"
+            tools:ignore="TouchTargetSizeCheck" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/saveUpdatesButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="10dp"
-        android:background="#009688"
-        android:text="@string/done"
+        <ImageButton
+            android:id="@+id/toDoDetailCategImageBtn"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:background="@drawable/color_none"
+            android:contentDescription="@string/choose_category"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_baseline_folder_24"
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck,TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/saveUpdateButton"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/save_new_button"
+        android:contentDescription="@string/save"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/deleteToDoButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:srcCompat="@drawable/ic_baseline_done_24"
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <ImageButton
+        android:id="@+id/deleteToDoButton"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/delete_category_corner"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_delete_forever_24"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/rescheduleLabelTv"

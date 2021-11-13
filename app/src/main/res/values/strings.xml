@@ -31,4 +31,7 @@
     <string name="alphabetical_sort_label">Alphabetical</string>
     <string name="category_sort_label">Category</string>
     <string name="reschedule_label">Reschedule or delete this to do.</string>
+    <string name="select_category">Select Category</string>
+    <string name="channel_name">my chanell</string>
+    <string name="location">Location</string>
 </resources>

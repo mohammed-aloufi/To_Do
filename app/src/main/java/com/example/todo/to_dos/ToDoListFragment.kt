@@ -52,7 +52,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         setHasOptionsMenu(true)
         initViews(view)
         setLayoutMangers()
-        setAnimations()
+        setRvAnimations()
 
         return view
     }
@@ -122,7 +122,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         toDoListRecyclerView.layoutManager = toDoLayoutManager
     }
 
-    private fun setAnimations(){
+    private fun setRvAnimations(){
         (categoriesRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         (toDoListRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
@@ -234,7 +234,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         private val toDoCategoryView: View = view.findViewById(R.id.toDoCategoryView)
         private val toDoTitleTv: TextView = view.findViewById(R.id.toDoTitleTv)
         private val toDoDueDateTv: TextView = view.findViewById(R.id.toDoDueDateTv)
-        private val rescheduleToDoBtn: Button = view.findViewById(R.id.rescheduleButton)
+        private val rescheduleToDoBtn: ImageButton = view.findViewById(R.id.rescheduleButton)
 
         private lateinit var toDo: ToDo
         private val dateFormat = "EEE, MMM dd"
@@ -242,7 +242,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
 
         init {
             itemView.setOnClickListener(this)
-            rescheduleToDoBtn.setOnClickListener(this)
             rescheduleToDoBtn.visibility = View.GONE
         }
 
@@ -263,7 +262,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
                     val dateString = android.text.format.DateFormat.format(dateFormat, toDo.dueDate)
                     toDoDueDateTv.text = dateString
 
-                    if(today.after(toDo.dueDate)){
+                    if(today.after(toDo.dueDate) && !toDo.isDone){
                         handleDoneToDos()
                         rescheduleToDoBtn.visibility = View.VISIBLE
                     }else{
@@ -305,9 +304,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
                     }else{
                         toDoDetailsFragmentShow()
                     }
-                }
-                rescheduleToDoBtn -> {
-                    toDoDetailsFragmentShow(EXTRA_RESCHEDULE)
                 }
             }
         }

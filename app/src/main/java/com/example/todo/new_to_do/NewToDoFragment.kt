@@ -58,10 +58,10 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
 
     override fun onClick(v: View?) {
         when(v){
-            dateButton -> handleDateButtonPressed()
-            categoryButton -> handleCategoryButtonPressed()
+            dateButton -> handleDateBtnPressed()
+            categoryButton -> handleCategoryBtnPressed()
             cancelButton -> dismiss()
-            saveButton -> handleSaveButtonPressed()
+            saveButton -> handleSaveBtnPressed()
             else -> Toast.makeText(context, "Unknown error!!", Toast.LENGTH_SHORT).show()
         }
     }
@@ -75,7 +75,7 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
 
     override fun onCategorySelected(category: Category) {
         categoryId = category.id
-        categoryButton.setBackgroundColor(resources.getColor(category.color))
+        categoryButton.setBackgroundResource(categoryViewModel.colorMap.getValue(category.color))
     }
 
     private fun initViews(view: View){
@@ -103,19 +103,19 @@ class NewToDoFragment: BottomSheetDialogFragment(), View.OnClickListener, DatePi
             })
     }
 
-    private fun handleDateButtonPressed(){
+    private fun handleDateBtnPressed(){
         val datePicker = DatePickerDialogFragment()
         datePicker.setTargetFragment(this, 0)
         datePicker.show(parentFragmentManager, "date")
     }
 
-    private fun handleCategoryButtonPressed(){
+    private fun handleCategoryBtnPressed(){
         val categoryPicker = CategoryPickerFragment()
         categoryPicker.setTargetFragment(this, 0)
         categoryPicker.show(parentFragmentManager, NEW_CATEGORY_KEY)
     }
 
-    private fun handleSaveButtonPressed(){
+    private fun handleSaveBtnPressed(){
         val title = newToDoTileTv.text.toString()
         if (title.isNotBlank()) {
             val description = newToDoDescriptionTv.text.toString()

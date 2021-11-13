@@ -12,7 +12,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="10dp"
-        android:background="#009688"
+        android:background="@drawable/save_new_button"
         android:contentDescription="@string/save"
         android:minWidth="48dp"
         android:minHeight="48dp"
@@ -23,7 +23,7 @@
         tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <ImageButton
-        android:id="@+id/cancelNewCategoryButton"
+        android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -75,7 +75,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="#880000"
+        android:background="@drawable/delete_category_corner"
         android:minWidth="48dp"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"

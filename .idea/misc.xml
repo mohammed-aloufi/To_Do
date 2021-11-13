@@ -58,7 +58,7 @@
         <entry key="app/src/main/res/layout/new_to_do_fragment.xml" value="0.335" />
         <entry key="app/src/main/res/layout/sort_fragment.xml" value="0.17261904761904762" />
         <entry key="app/src/main/res/layout/to_do_list_item.xml" value="0.25" />
-        <entry key="app/src/main/res/menu/fragment_to_do_menu.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/menu/fragment_to_do_menu.xml" value="0.1" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.15833333333333333" />
       </map>
     </option>

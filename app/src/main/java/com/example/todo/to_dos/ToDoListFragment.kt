@@ -87,11 +87,6 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
                 onPause()
                 true
             }
-            R.id.app_bar_search -> {
-                //TODO: search feature
-                Toast.makeText(context, "Search pressed", Toast.LENGTH_SHORT).show()
-                true
-            }
             else -> return super.onOptionsItemSelected(item)
         }
     }

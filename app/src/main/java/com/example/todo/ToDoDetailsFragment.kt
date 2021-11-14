@@ -61,7 +61,6 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeToDoLiveData()
-        isReschedule()
     }
 
     override fun onStart() {
@@ -152,6 +151,7 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
                     else -> dateFormat(toDo)
                 }
                 observeCategoryLiveData(it.categoryId)
+                isReschedule()
             }
         })
     }
@@ -167,9 +167,11 @@ class ToDoDetailsFragment : Fragment(), DatePickerDialogFragment.DatePickerCallB
     }
 
     private fun isReschedule(){
-        if (arguments?.getString(EXTRA_RESCHEDULE) != null){
-            //TODO: maybe Toast?
+        val today = Date()
+        if(toDo.dueDate != null && today.after(toDo.dueDate) && !toDo.isDone){
             rescheduleLabelTv.visibility = View.VISIBLE
+        }else{
+            rescheduleLabelTv.visibility = View.GONE
         }
     }
 

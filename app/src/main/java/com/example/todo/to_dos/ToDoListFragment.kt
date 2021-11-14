@@ -116,7 +116,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         toDoListRecyclerView.layoutManager = toDoLayoutManager
     }
 
-    private fun setRvAnimations(){
+    private fun setRvAnimations() {
         (categoriesRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         (toDoListRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
@@ -125,7 +125,9 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         toDoViewModel.liveDataToDo.observe(
             viewLifecycleOwner, Observer { list ->
                 if (toDoViewModel.didSelectCategory) {
-                    updateToDoUI(list.filter { it.categoryId == toDoViewModel.selectedCategoryId })
+                    updateToDoUI(list.filter {
+                        it.categoryId == toDoViewModel.selectedCategoryId
+                    })
                 } else {
                     updateToDoUI(list)
                 }
@@ -166,8 +168,8 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         }
     }
 
-    private fun sortToDos(toDos: List<ToDo>): List<ToDo>{
-        if (toDoViewModel.sortBy == SORT_BY_DUE_DATE){
+    private fun sortToDos(toDos: List<ToDo>): List<ToDo> {
+        if (toDoViewModel.sortBy == SORT_BY_DUE_DATE) {
             return toDos.sortedBy {
                 it.dueDate
             }.sortedBy {
@@ -175,7 +177,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             }
         }
 
-        if (toDoViewModel.sortBy == SORT_BY_CREATION_DATE){
+        if (toDoViewModel.sortBy == SORT_BY_CREATION_DATE) {
             return toDos.sortedBy {
                 it.creationDate
             }.sortedBy {
@@ -183,7 +185,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             }
         }
 
-        if (toDoViewModel.sortBy == SORT_ALPHABETICALLY){
+        if (toDoViewModel.sortBy == SORT_ALPHABETICALLY) {
             return toDos.sortedBy {
                 it.title
             }.sortedBy {
@@ -191,13 +193,13 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
             }
         }
 
-        if (toDoViewModel.sortBy == SORT_BY_CATEGORY){
+        if (toDoViewModel.sortBy == SORT_BY_CATEGORY) {
             return toDos.sortedBy {
                 it.categoryId
             }.sortedBy {
                 it.isDone
             }
-        }else{
+        } else {
             return toDos.sortedBy {
                 it.isDone
             }
@@ -254,10 +256,10 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
                     val dateString = android.text.format.DateFormat.format(dateFormat, toDo.dueDate)
                     toDoDueDateTv.text = dateString
 
-                    if(today.after(toDo.dueDate) && !toDo.isDone){
-                        handleDoneToDos()
+                    if (today.after(toDo.dueDate) && !toDo.isDone) {
+                        toDoTitleTv.setTextColor(resources.getColor(R.color.category_color_red))
                         rescheduleToDoBtn.visibility = View.VISIBLE
-                    }else{
+                    } else {
                         rescheduleToDoBtn.visibility = View.GONE
                     }
 
@@ -287,31 +289,17 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         override fun onClick(v: View?) {
             when (v) {
                 itemView -> {
-                    if (toDo.dueDate != null){
-                        if (today.after(toDo.dueDate)){
-                            toDoDetailsFragmentShow(EXTRA_RESCHEDULE)
-                        }else{
-                            toDoDetailsFragmentShow()
-                        }
-                    }else{
-                        toDoDetailsFragmentShow()
-                    }
+                    toDoDetailsFragmentShow()
                 }
             }
         }
 
-        private fun toDoDetailsFragmentShow(why: String = "edit"){
+        private fun toDoDetailsFragmentShow() {
             val args = Bundle()
             args.putSerializable(
                 EXTRA_TO_DO_ID,
                 toDo.id
             )
-            if (why == EXTRA_RESCHEDULE){
-                args.putString(
-                    EXTRA_RESCHEDULE,
-                    "true"
-                )
-            }
             val detailsFragment = ToDoDetailsFragment()
             detailsFragment.arguments = args
 

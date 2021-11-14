@@ -41,7 +41,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         ViewModelProvider(this).get(CategoryViewModel::class.java)
     }
     private var categoriesColors: MutableMap<UUID, Int> = mutableMapOf()
-
+    private var categoriesCount = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -148,9 +148,13 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
     }
 
     private fun handleEditCategoryBtnPressed() {
-        val categoryPicker = CategoryPickerFragment()
-        categoryPicker.setTargetFragment(this, 0)
-        categoryPicker.show(parentFragmentManager, EDIT_CATEGORY_TAG)
+        if (categoriesCount > 0 ){
+            val categoryPicker = CategoryPickerFragment()
+            categoryPicker.setTargetFragment(this, 0)
+            categoryPicker.show(parentFragmentManager, EDIT_CATEGORY_TAG)
+        }else {
+            Toast.makeText(context, R.string.no_category, Toast.LENGTH_SHORT).show()
+        }
     }
 
     /** UI updates */
@@ -218,6 +222,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         categories.forEach {
             categoriesColors[it.id] = it.color
         }
+        categoriesCount = categories.count() - 1
     }
 
     /** toDoRecyclerView's ViewHolder & Adapter */

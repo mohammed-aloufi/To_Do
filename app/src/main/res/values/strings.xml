@@ -34,4 +34,5 @@
     <string name="select_category">Select Category</string>
     <string name="channel_name">my chanell</string>
     <string name="location">Location</string>
+    <string name="no_category">You haven\'t made any category to edit.</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.todo.to_dos
 
+import android.animation.Animator
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.airbnb.lottie.LottieAnimationView
 import com.example.todo.*
 import com.example.todo.cateogry.CategoryPickerFragment
 import com.example.todo.database.Category
@@ -33,6 +35,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
     private lateinit var toDoListRecyclerView: RecyclerView
     private lateinit var newToDoActionButton: FloatingActionButton
     private lateinit var emptyImageView: ImageView
+    private lateinit var lottieAnimationView: LottieAnimationView
 
     private val toDoViewModel by lazy {
         ViewModelProvider(this).get(ToDoViewModel::class.java)
@@ -105,6 +108,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         toDoListRecyclerView = view.findViewById(R.id.toDoListRecyclerView)
         newToDoActionButton = view.findViewById(R.id.newToDoActionButton)
         emptyImageView = view.findViewById(R.id.emptyImageView)
+        lottieAnimationView = view.findViewById(R.id.lottieAnimationView)
     }
 
     private fun setLayoutMangers() {
@@ -225,6 +229,28 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
         categoriesCount = categories.count() - 1
     }
 
+    private fun showDoneAnimation(){
+        lottieAnimationView.playAnimation()
+        lottieAnimationView.visibility = View.VISIBLE
+        lottieAnimationView.addAnimatorListener(object : Animator.AnimatorListener{
+            override fun onAnimationStart(animation: Animator?) {
+                //
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                lottieAnimationView.visibility = View.GONE
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+                lottieAnimationView.visibility = View.GONE
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+                //
+            }
+
+        })
+    }
     /** toDoRecyclerView's ViewHolder & Adapter */
     private inner class ToDoViewHolder(view: View) : RecyclerView.ViewHolder(view),
         View.OnClickListener {
@@ -277,6 +303,7 @@ class ToDoListFragment : Fragment(), CategoryPickerFragment.CategoryPickerCallBa
 
             toDoIsDoneCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 toDo.isDone = isChecked
+                if (isChecked) showDoneAnimation()
                 toDoViewModel.saveUpdates(toDo)
                 getAllToDos()
             }

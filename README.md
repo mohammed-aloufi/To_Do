@@ -72,5 +72,3 @@ Follow the steps below to get started with the project's development environment
 
 ### LottieFiles Animation Documentation:
 [Go to documentation](https://airbnb.io/lottie/#/android)
-
-```

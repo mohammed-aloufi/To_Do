@@ -18,6 +18,6 @@ This project represents an android application **ToDo**, Where users can manage 
 * LottieFiles Animation Librariy.
 
 ## User interfaces
-###### Home
-<img width="826" alt="Screen Shot 1443-07-14 at 3 29 47 PM" src="https://user-images.githubusercontent.com/92246795/154062475-44e0d0ac-4f65-4f0d-836f-ec8a73137ccb.png">
 
+## Home
+![New Project (9)](https://user-images.githubusercontent.com/92246795/154063431-92b9d863-7bb9-4ddd-9197-08961d3aea79.png)

@@ -19,5 +19,5 @@ This project represents an android application **ToDo**, Where users can manage 
 
 ## User interfaces
 
-## Home
+**Home**
 ![New Project (9)](https://user-images.githubusercontent.com/92246795/154063431-92b9d863-7bb9-4ddd-9197-08961d3aea79.png)
